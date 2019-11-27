@@ -21,6 +21,7 @@ const momentPipeFactory = (momentFn: MomentFns) => /**
       if (!compareDate) {
         return list;
       }
+
       return list.filter(item => {
         const itemMoment = moment(dateFn(item));
         return itemMoment[momentFn](moment(compareDate), granularity);

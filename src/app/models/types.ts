@@ -3,4 +3,4 @@ type PickR<T, R> = {
 }[keyof T];
 type Remove<T, R> = Omit<T, PickR<T, R>>;
 
-export type Viewmodel<T> = Remove<T, Function>;
+export type Viewmodel<T> = Omit<Remove<T, Function>, "id"> & { id?: string };

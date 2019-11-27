@@ -9,17 +9,9 @@ import { BUDGETS, CATEGORIES, TRANSACTIONS } from "../mocks";
   providedIn: "root"
 })
 export class StoreService {
-  budgets = new StoreSet<Budget>();
-  categories = new StoreSet<Category>();
-  transactions = new StoreSet<Transaction>();
+  budgets = new StoreSet<Budget>(BUDGETS);
+  categories = new StoreSet<Category>(CATEGORIES);
+  transactions = new StoreSet<Transaction>(TRANSACTIONS);
 
-  constructor() {
-    this.setMockData();
-  }
-
-  setMockData() {
-    this.budgets.set(BUDGETS);
-    this.categories.set(CATEGORIES);
-    this.transactions.set(TRANSACTIONS);
-  }
+  constructor() {}
 }

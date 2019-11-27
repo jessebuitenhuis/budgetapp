@@ -1,23 +1,38 @@
 import { BaseModel } from "./BaseModel";
 import { BehaviorSubject, Observable } from "rxjs";
 import { take, shareReplay } from "rxjs/operators";
+import { Viewmodel } from "./types";
+import { FilterFn, find } from "../helpers/pipes";
 
-export class StoreSet<T extends BaseModel<T>> {
-  private _items$: BehaviorSubject<T[]> = new BehaviorSubject([] as T[]);
+type FindFn<T> = string | ((item: T) => boolean);
+
+export class StoreSet<T extends BaseModel> {
+  private _items$: BehaviorSubject<T[]> = new BehaviorSubject(
+    this._initialValue
+  );
   items$ = this._items$.asObservable().pipe(shareReplay(1));
 
-  set(items: T[]) {
-    this._items$.next([...items]);
+  constructor(private _initialValue: T[] = []) {
+    this.items$.subscribe(x => {
+      console.log("State updated", x);
+    });
   }
 
   // CREATE
-  add(item: T): void {
-    this._items$.next([...this._items$.value, item]);
+  add(item: Viewmodel<T>): void {
+    const newItem = {
+      id: item.id || this.generateId(),
+      ...item
+    } as T;
+
+    this._items$.next([...this._items$.value, newItem]);
   }
 
   // READ
-  find(id: string): T | undefined {
-    return this._items$.value.find(x => x.id === id);
+  find(findFn: FindFn<T>): T | undefined {
+    findFn =
+      findFn instanceof Function ? findFn : (item: T) => item.id === findFn;
+    return this._items$.value.find(findFn);
   }
 
   findIndex(id?: string): number {
@@ -28,29 +43,23 @@ export class StoreSet<T extends BaseModel<T>> {
   }
 
   // UPDATE
-  update(item: T): void {
-    const index = this.findIndex(item.id);
-
-    if (index === -1) {
-      throw new Error("Item not found.");
-    }
-
-    this._items$.next([
-      ...this._items$.value.slice(0, index),
-      item.clone(),
-      ...this._items$.value.slice(index + 1)
-    ]);
+  update(updatedItem: T): void {
+    const newList = this._items$.value.map(item => {
+      if (item.id !== updatedItem.id) {
+        return item;
+      }
+      return { ...updatedItem };
+    });
+    this._items$.next(newList);
   }
 
   // DELETE
   remove(item: T) {
-    const index = this.findIndex(item.id);
+    const listWithoutItem = this._items$.value.filter(x => x.id !== item.id);
+    this._items$.next(listWithoutItem);
+  }
 
-    if (index > -1) {
-      this._items$.next([
-        ...this._items$.value.slice(0, index),
-        ...this._items$.value.slice(index + 1)
-      ]);
-    }
+  generateId() {
+    return new Date().getTime() + "";
   }
 }

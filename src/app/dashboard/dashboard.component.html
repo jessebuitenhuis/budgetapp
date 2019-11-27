@@ -1,31 +1,49 @@
-<h1>Dashboard</h1>
+<header class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="mb-0">Dashboard</h1>
 
-<!-- TO§DO CREATE MONTH PICKER COMPONENT-->
-<div class="btn-group">
-  <button type="button" class="btn btn-primary" (click)="prevMonth()">
-    < Prev
-  </button>
-  <button type="button" class="btn btn-primary">
-    {{ selectedMonth$ | async }}
-  </button>
-  <button type="button" class="btn btn-primary" (click)="nextMonth()">
-    Next >
-  </button>
-</div>
+  <app-month-picker
+    [month]="selectedMonth$ | async"
+    (monthChanged)="selectedMonth$.next($event)"
+  ></app-month-picker>
+</header>
 
 <table class="table">
   <thead>
     <tr>
       <th>Category</th>
-      <th>Budgeted</th>
-      <th>Spent</th>
-      <th>Available</th>
+      <th class="w-15">Budgeted</th>
+      <th class="w-15">Spent</th>
+      <th class="w-15">Available</th>
     </tr>
   </thead>
   <tr *ngFor="let row of data$ | async">
     <td>{{ row.category.name }}</td>
-    <td>{{ row.budgeted }}</td>
-    <td>{{ row.spent }}</td>
-    <td>{{ row.available }}</td>
+    <td class="py-0">
+      <app-input-currency
+        name="budgeted"
+        [ngModel]="row.budgeted"
+        (ngModelChange)="updateBudget(row.category.id, $event)"
+        [ngModelOptions]="{ updateOn: 'blur' }"
+      ></app-input-currency>
+    </td>
+    <td class="py-0">
+      <app-input-currency
+        [ngModel]="row.spent"
+        readonly="true"
+      ></app-input-currency>
+      <!-- {{ row.spent }} -->
+      <!-- <input
+        type="number"
+        [ngModel]="row.spent"
+        class="form-control-plaintext"
+        readonly
+      /> -->
+    </td>
+    <td class="py-0">
+      <app-input-currency
+        [ngModel]="row.available"
+        readonly="true"
+      ></app-input-currency>
+    </td>
   </tr>
 </table>

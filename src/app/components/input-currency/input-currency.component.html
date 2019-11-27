@@ -1,0 +1,15 @@
+<div class="input-group">
+  <div class="input-group-prepend">
+    &euro;
+  </div>
+  <input
+    type="text"
+    #inputEl
+    class="form-control-plaintext text-right"
+    step=".01"
+    (focus)="onFocus()"
+    (input)="onChange($event)"
+    (blur)="onBlur($event)"
+    [readonly]="readonly"
+  />
+</div>

@@ -1,10 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { CategoryService } from "../services/category.service";
 import { TransactionService } from "../services/transaction.service";
-import { map, combineLatest, switchMap, tap } from "rxjs/operators";
+import {
+  map,
+  combineLatest,
+  switchMap,
+  tap,
+  take,
+  flatMap
+} from "rxjs/operators";
 import { BehaviorSubject } from "rxjs";
 import { BudgetService } from "../services/budget.service";
-import * as moment from "moment";
 
 @Component({
   selector: "app-dashboard",
@@ -12,26 +18,23 @@ import * as moment from "moment";
   styleUrls: ["./dashboard.component.css"]
 })
 export class DashboardComponent implements OnInit {
-  selectedMonth$ = new BehaviorSubject<moment.Moment>(moment());
+  selectedMonth$ = new BehaviorSubject<Date>(new Date());
   categories$ = this._categoryService.categories$;
 
   available$ = this.selectedMonth$.pipe(
-    switchMap(month => this._categoryService.getAvailable$(month.toDate()))
+    switchMap(month => this._categoryService.getAvailable$(month))
   );
 
   spent$ = this.selectedMonth$.pipe(
-    switchMap(month =>
-      this._transactionService.spentByCategory$(month.toDate())
-    )
+    switchMap(month => this._transactionService.spentByCategory$(month))
   );
 
   budgeted$ = this.selectedMonth$.pipe(
-    switchMap(month => this._budgetService.budgetedByCategory$(month.toDate()))
+    switchMap(month => this._budgetService.budgetedByCategory$(month))
   );
 
   data$ = this.categories$.pipe(
     combineLatest(this.available$, this.spent$, this.budgeted$),
-    tap(x => console.log("changed")),
     map(([cats, available, spent, budgeted]) =>
       cats.map(cat => ({
         category: cat,
@@ -50,13 +53,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {}
 
-  prevMonth() {
-    this.selectedMonth$.next(
-      this.selectedMonth$.value.subtract(1, "month").clone()
-    );
-  }
-
-  nextMonth() {
-    this.selectedMonth$.next(this.selectedMonth$.value.add(1, "month").clone());
+  updateBudget(categoryId: string, amount: number) {
+    const month = this.selectedMonth$.value;
+    this._budgetService.update(month, categoryId, amount);
   }
 }

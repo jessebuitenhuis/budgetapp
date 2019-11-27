@@ -5,8 +5,6 @@ import { Viewmodel } from "../models/types";
 import { TransactionService } from "./transaction.service";
 import { BudgetService } from "./budget.service";
 import { combineLatest, map } from "rxjs/operators";
-import { groupBy } from "../helpers/pipes";
-import { mapObject } from "underscore";
 
 @Injectable({
   providedIn: "root"
@@ -20,10 +18,8 @@ export class CategoryService {
     private _budgetService: BudgetService
   ) {}
 
-  create(data: Viewmodel<Category>): Category {
-    const category = new Category(data);
+  create(category: Viewmodel<Category>): void {
     this._store.categories.add(category);
-    return category;
   }
 
   delete(category: Category): void {
@@ -31,16 +27,19 @@ export class CategoryService {
   }
 
   getAvailable$(month?: Date) {
-    const spent$ = this._transactionService.spentByCategory$(month);
-    const budgeted$ = this._budgetService.budgetedByCategory$(month);
+    const spent$ = this._transactionService.totalSpentByCategory$(month);
+    const budgeted$ = this._budgetService.totalBudgetedByCategory$(month);
 
     return this.categories$.pipe(
       combineLatest(spent$, budgeted$),
       map(([categories, spent, budgeted]) => {
+        console.log(categories, spent, budgeted);
         return categories.reduce((obj, cat) => {
+          const catBudgeted = budgeted[cat.id] || 0;
+          const spentBudgeted = spent[cat.id] || 0;
           return {
             ...obj,
-            [cat.id]: budgeted[cat.id] - spent[cat.id] || 0
+            [cat.id]: catBudgeted - spentBudgeted || 0
           };
         }, {} as { [key: string]: number });
       })

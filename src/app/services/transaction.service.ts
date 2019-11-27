@@ -12,9 +12,17 @@ import { shareReplay } from "rxjs/operators";
 export class TransactionService {
   transactions$ = this._store.transactions.items$;
 
-  spentByCategory$ = (month?: Date) =>
+  spentByCategory$ = (month: Date) =>
     this.transactions$.pipe(
-      isSameOrBeforeDate(x => x.date, month, "month"),
+      isSameDate(x => x.date, month, "month"),
+      groupBy("categoryId"),
+      sumDict(x => x.amount),
+      shareReplay(1)
+    );
+
+  totalSpentByCategory$ = (maxMonth?: Date) =>
+    this.transactions$.pipe(
+      isSameOrBeforeDate(x => x.date, maxMonth, "month"),
       groupBy("categoryId"),
       sumDict(x => x.amount),
       shareReplay(1)
