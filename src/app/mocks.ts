@@ -1,6 +1,12 @@
 import { Transaction } from "./models/Transaction";
 import { Category } from "./models/Category";
 import { Budget } from "./models/Budget";
+import { Account } from "./models/Account";
+
+export const ACCOUNTS: Account[] = [
+  { id: "A", name: "Account A", accountNumber: "1234" },
+  { id: "B", name: "Account B", accountNumber: "3456" }
+];
 
 export const CATEGORIES: Category[] = [
   { name: "Category A", id: "A" },

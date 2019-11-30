@@ -1,0 +1,20 @@
+<td>{{ category.name }}</td>
+<td class="py-0">
+  <app-input-currency
+    [ngModel]="budgeted$ | async"
+    (ngModelChange)="updateBudget($event)"
+    [ngModelOptions]="{ updateOn: 'blur' }"
+  ></app-input-currency>
+</td>
+<td class="py-0">
+  <app-input-currency
+    [ngModel]="spent$ | async"
+    readonly="true"
+  ></app-input-currency>
+</td>
+<td class="py-0">
+  <app-input-currency
+    [ngModel]="available$ | async"
+    readonly="true"
+  ></app-input-currency>
+</td>

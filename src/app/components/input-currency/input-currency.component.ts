@@ -13,7 +13,7 @@ import { CurrencyPipe } from "@angular/common";
 @Component({
   selector: "app-input-currency",
   templateUrl: "./input-currency.component.html",
-  styleUrls: ["./input-currency.component.css"]
+  styleUrls: ["./input-currency.component.scss"]
 })
 export class InputCurrencyComponent extends AbstractValueAccessor<number> {
   @ViewChild("inputEl", { static: true }) inputEl!: ElementRef<
@@ -62,8 +62,6 @@ export class InputCurrencyComponent extends AbstractValueAccessor<number> {
     }
 
     this.inputEl.nativeElement.value = formattedString;
-
-    this.value = this.inputValue;
   }
 
   onBlur() {
@@ -74,5 +72,9 @@ export class InputCurrencyComponent extends AbstractValueAccessor<number> {
 
   onFocus(): void {
     this.inputEl.nativeElement.select();
+  }
+
+  onEnter(): void {
+    this.inputEl.nativeElement.blur();
   }
 }

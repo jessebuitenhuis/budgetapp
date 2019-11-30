@@ -1,0 +1,7 @@
+<ng-select
+  [items]="accounts$ | async"
+  [(ngModel)]="value"
+  bindValue="id"
+  bindLabel="name"
+  [addTag]="addTagFn"
+></ng-select>

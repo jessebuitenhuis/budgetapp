@@ -4,32 +4,29 @@ import { FormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
 import { CommonModule, registerLocaleData } from "@angular/common";
 import { ComponentsModule } from "./components/components.module";
 import { MomentModule } from "ngx-moment";
 import localeNl from "@angular/common/locales/nl";
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from "./navbar/navbar.component";
+import { DashboardModule } from "./dashboard/dashboard.module";
+import { TransactionsModule } from "./transactions/transactions.module";
 
 registerLocaleData(localeNl, "nl");
 
 @NgModule({
-   declarations: [
-      AppComponent,
-      DashboardComponent,
-      NavbarComponent
-   ],
-   imports: [
-      BrowserModule,
-      AppRoutingModule,
-      CommonModule,
-      FormsModule,
-      ComponentsModule,
-      MomentModule
-   ],
-   providers: [],
-   bootstrap: [
-      AppComponent
-   ]
+  declarations: [AppComponent, NavbarComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    CommonModule,
+    FormsModule,
+    ComponentsModule,
+    MomentModule,
+    DashboardModule,
+    TransactionsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

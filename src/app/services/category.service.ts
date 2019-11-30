@@ -25,24 +25,4 @@ export class CategoryService {
   delete(category: Category): void {
     this._store.categories.remove(category);
   }
-
-  getAvailable$(month?: Date) {
-    const spent$ = this._transactionService.totalSpentByCategory$(month);
-    const budgeted$ = this._budgetService.totalBudgetedByCategory$(month);
-
-    return this.categories$.pipe(
-      combineLatest(spent$, budgeted$),
-      map(([categories, spent, budgeted]) => {
-        console.log(categories, spent, budgeted);
-        return categories.reduce((obj, cat) => {
-          const catBudgeted = budgeted[cat.id] || 0;
-          const spentBudgeted = spent[cat.id] || 0;
-          return {
-            ...obj,
-            [cat.id]: catBudgeted - spentBudgeted || 0
-          };
-        }, {} as { [key: string]: number });
-      })
-    );
-  }
 }

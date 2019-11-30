@@ -10,40 +10,15 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Category</th>
-      <th class="w-15">Budgeted</th>
-      <th class="w-15">Spent</th>
-      <th class="w-15">Available</th>
+      <th class="w-100">Category</th>
+      <th>Budgeted</th>
+      <th>Spent</th>
+      <th>Available</th>
     </tr>
   </thead>
-  <tr *ngFor="let row of data$ | async">
-    <td>{{ row.category.name }}</td>
-    <td class="py-0">
-      <app-input-currency
-        name="budgeted"
-        [ngModel]="row.budgeted"
-        (ngModelChange)="updateBudget(row.category.id, $event)"
-        [ngModelOptions]="{ updateOn: 'blur' }"
-      ></app-input-currency>
-    </td>
-    <td class="py-0">
-      <app-input-currency
-        [ngModel]="row.spent"
-        readonly="true"
-      ></app-input-currency>
-      <!-- {{ row.spent }} -->
-      <!-- <input
-        type="number"
-        [ngModel]="row.spent"
-        class="form-control-plaintext"
-        readonly
-      /> -->
-    </td>
-    <td class="py-0">
-      <app-input-currency
-        [ngModel]="row.available"
-        readonly="true"
-      ></app-input-currency>
-    </td>
-  </tr>
+  <tr
+    *ngFor="let category of categories$ | async"
+    app-dashboard-table-row
+    [category]="category"
+  ></tr>
 </table>

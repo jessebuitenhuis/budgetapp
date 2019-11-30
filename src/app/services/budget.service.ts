@@ -15,23 +15,6 @@ import { isSame } from "../helpers/dates";
 export class BudgetService {
   budgets$ = this._store.budgets.items$;
 
-  budgetedByCategory$ = (month: Date) =>
-    this.budgets$.pipe(
-      isSameDate(x => x.month, month, "month"),
-      groupBy("categoryId"),
-      sumDict(x => x.amount),
-      shareReplay(1)
-    );
-
-  totalBudgetedByCategory$(maxMonth?: Date) {
-    return this.budgets$.pipe(
-      isSameOrBeforeDate(x => x.month, maxMonth, "month"),
-      groupBy("categoryId"),
-      sumDict(x => x.amount),
-      shareReplay(1)
-    );
-  }
-
   constructor(private _store: StoreService) {}
 
   create(budget: Viewmodel<Budget>): void {
@@ -67,11 +50,15 @@ export class BudgetService {
     );
   }
 
-  getBudgeted$(
-    filters: { month?: Date; categoryId?: string } = {}
-  ): Observable<number> {
+  getBudgeted$(filters: {
+    month?: Date;
+    categoryId: string;
+    maxMonth?: Date;
+  }): Observable<number> {
     return this.budgets$.pipe(
-      where(filters),
+      where({ categoryId: filters.categoryId }),
+      isSameDate(x => x.month, filters.month, "month"),
+      isSameOrBeforeDate(x => x.month, filters.maxMonth, "month"),
       sum(x => x.amount)
     );
   }

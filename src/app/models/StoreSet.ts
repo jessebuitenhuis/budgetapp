@@ -19,13 +19,20 @@ export class StoreSet<T extends BaseModel> {
   }
 
   // CREATE
-  add(item: Viewmodel<T>): void {
-    const newItem = {
-      id: item.id || this.generateId(),
-      ...item
-    } as T;
+  add(items: Viewmodel<T> | Viewmodel<T>[]): void {
+    if (!(items instanceof Array)) {
+      items = [items];
+    }
 
-    this._items$.next([...this._items$.value, newItem]);
+    const newItems = items.map(
+      item =>
+        ({
+          id: item.id || this.generateId(),
+          ...item
+        } as T)
+    );
+
+    this._items$.next([...this._items$.value, ...newItems]);
   }
 
   // READ
@@ -40,6 +47,15 @@ export class StoreSet<T extends BaseModel> {
       return -1;
     }
     return this._items$.value.findIndex(x => x.id === id);
+  }
+
+  set(item: T, props: Partial<T>): void {
+    const updatedItem = {
+      ...item,
+      ...props
+    } as T;
+
+    this.update(updatedItem);
   }
 
   // UPDATE

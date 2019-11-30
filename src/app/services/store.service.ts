@@ -3,12 +3,14 @@ import { Category } from "../models/Category";
 import { Budget } from "../models/Budget";
 import { Transaction } from "../models/Transaction";
 import { StoreSet } from "../models/StoreSet";
-import { BUDGETS, CATEGORIES, TRANSACTIONS } from "../mocks";
+import { BUDGETS, CATEGORIES, TRANSACTIONS, ACCOUNTS } from "../mocks";
+import { Account } from "../models/Account";
 
 @Injectable({
   providedIn: "root"
 })
 export class StoreService {
+  accounts = new StoreSet<Account>(ACCOUNTS);
   budgets = new StoreSet<Budget>(BUDGETS);
   categories = new StoreSet<Category>(CATEGORIES);
   transactions = new StoreSet<Transaction>(TRANSACTIONS);

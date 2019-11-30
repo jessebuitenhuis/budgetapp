@@ -37,7 +37,7 @@
     "ordered-imports": false,
     "quotemark": [false, "double"],
     "trailing-comma": false,
-    "typedef": true,
+    "typedef": [true, "call-signature"],
     "no-output-on-prefix": true,
     "no-inputs-metadata-property": true,
     "no-outputs-metadata-property": true,

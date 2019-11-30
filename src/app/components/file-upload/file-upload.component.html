@@ -1,0 +1,19 @@
+<button
+  class="btn btn-primary"
+  [disabled]="uploading"
+  (click)="openFileBrowser()"
+>
+  <ng-container *ngIf="uploading; else defaultTpl">
+    <i class="fa fa-spin fa-spinner mr-2"></i>Uploading...
+  </ng-container>
+  <ng-template #defaultTpl>{{ text }}</ng-template>
+</button>
+<input
+  #inputEl
+  type="file"
+  class="custom-file-input"
+  id="csvUpload"
+  hidden
+  [attr.accept]="accept"
+  (change)="onFileChanged($event)"
+/>
