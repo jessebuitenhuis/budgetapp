@@ -2,6 +2,7 @@ import { Transaction } from "./models/Transaction";
 import { Category } from "./models/Category";
 import { Budget } from "./models/Budget";
 import { Account } from "./models/Account";
+import { Payee } from "./models/Payee";
 
 export const ACCOUNTS: Account[] = [
   { id: "A", name: "Account A", accountNumber: "1234" },
@@ -62,4 +63,9 @@ export const TRANSACTIONS: Transaction[] = [
     date: new Date(),
     categoryId: "C"
   }
+];
+
+export const PAYEES: Payee[] = [
+  { id: "1", name: "Payee 1" },
+  { id: "2", name: "Payee 2" }
 ];

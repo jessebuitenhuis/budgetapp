@@ -1,0 +1,9 @@
+<ng-select
+  [items]="categories$ | async"
+  bindLabel="name"
+  bindValue="id"
+  [(ngModel)]="value"
+  [addTag]="addTagFn"
+  class="ng-select-plaintext"
+  placeholder="Category..."
+></ng-select>

@@ -1,9 +1,9 @@
 <ng-select
-  [items]="accounts$ | async"
+  [items]="payees$ | async"
   [(ngModel)]="value"
-  bindValue="id"
   bindLabel="name"
+  bindValue="id"
   [addTag]="addTagFn"
   class="ng-select-plaintext"
-  placeholder="Account..."
+  placeholder="Payee..."
 ></ng-select>

@@ -1,23 +1,34 @@
 <td class="text-nowrap">{{ transaction.date | date }}</td>
-<td>
+<td class="py-0">
   <app-select-account
     [ngModel]="transaction.accountId"
     (ngModelChange)="update({ accountId: $event })"
   ></app-select-account>
 </td>
 
-<td>{{ transaction.payeeId }}</td>
-<td>{{ transaction.categoryId }}</td>
-<td>
+<td class="py-0">
+  <app-select-payee
+    [ngModel]="transaction.payeeId"
+    (ngModelChange)="update({ payeeId: $event })"
+  ></app-select-payee>
+</td>
+<td class="py-0">
+  <app-select-category
+    [ngModel]="transaction.categoryId"
+    (ngModelChange)="update({ categoryId: $event })"
+  ></app-select-category>
+</td>
+<td class="py-0">
   <input
     type="text"
     class="form-control-plaintext"
     [ngModel]="transaction.description"
     (ngModelChange)="update({ description: $event })"
     [ngModelOptions]="{ updateOn: 'blur' }"
+    placeholder="Description..."
   />
 </td>
-<td>
+<td class="py-0">
   <app-input-currency
     [ngModel]="transaction.amount"
     (ngModelChange)="update({ amount: $event })"

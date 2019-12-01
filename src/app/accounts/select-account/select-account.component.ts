@@ -3,6 +3,7 @@ import { AccountService } from "src/app/services/account.service";
 import { StoreService } from "src/app/services/store.service";
 import { AbstractValueAccessor } from "src/app/helpers/AbstractValueAccessor";
 import { NgControl } from "@angular/forms";
+import { Account } from "src/app/models/Account";
 
 @Component({
   selector: "app-select-account",
@@ -19,8 +20,8 @@ export class SelectAccountComponent extends AbstractValueAccessor<string> {
     super(control);
   }
 
-  addTagFn = (name: string) => {
-    this._storeService.accounts.add({
+  addTagFn = (name: string): Account => {
+    return this._storeService.accounts.add({
       name
     });
   };

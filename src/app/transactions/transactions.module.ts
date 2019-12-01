@@ -6,9 +6,18 @@ import { TransactionsTableRowComponent } from "./transactions-table/transactions
 import { ComponentsModule } from "../components/components.module";
 import { FormsModule } from "@angular/forms";
 import { AccountsModule } from "../accounts/accounts.module";
+import { PayeesModule } from "../payees/payees.module";
+import { CategoriesModule } from "../categories/categories.module";
 
 @NgModule({
-  imports: [CommonModule, ComponentsModule, FormsModule, AccountsModule],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    FormsModule,
+    AccountsModule,
+    PayeesModule,
+    CategoriesModule
+  ],
   declarations: [
     TransactionsComponent,
     TransactionsTableComponent,

@@ -19,12 +19,12 @@ export class StoreSet<T extends BaseModel> {
   }
 
   // CREATE
-  add(items: Viewmodel<T> | Viewmodel<T>[]): void {
-    if (!(items instanceof Array)) {
-      items = [items];
-    }
+  add(item: Viewmodel<T>): T;
+  add(items: Viewmodel<T>[]): T[];
+  add(items: Viewmodel<T> | Viewmodel<T>[]): T | T[] {
+    const _items = items instanceof Array ? items : [items];
 
-    const newItems = items.map(
+    const newItems = _items.map(
       item =>
         ({
           id: item.id || this.generateId(),
@@ -33,6 +33,8 @@ export class StoreSet<T extends BaseModel> {
     );
 
     this._items$.next([...this._items$.value, ...newItems]);
+
+    return items instanceof Array ? newItems : newItems[0];
   }
 
   // READ

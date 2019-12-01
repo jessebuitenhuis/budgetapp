@@ -2,4 +2,10 @@
   td {
     vertical-align: middle;
   }
+
+  .form-control-plaintext,
+  ng-select {
+    width: 10vw;
+    min-width: 150px;
+  }
 }
