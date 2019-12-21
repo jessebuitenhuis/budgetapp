@@ -10,7 +10,7 @@ import { Component } from "@angular/core";
 })
 export class DashboardComponent {
   selectedMonth$ = this._dashboardService.selectedMonth$;
-  categories$ = this._categoryService.categories$;
+  categories$ = this._categoryService.entities$;
 
   constructor(
     private _dashboardService: DashboardService,

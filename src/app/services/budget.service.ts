@@ -1,61 +1,46 @@
 import { Injectable } from "@angular/core";
-import { StoreService } from "./store.service";
-import { Viewmodel } from "../models/types";
+import { Observable } from "rxjs";
+import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
+import { sum, where } from "../helpers/pipes";
 import { Budget } from "../models/Budget";
-import { Observable, of, from } from "rxjs";
-import { sum, where, groupBy, sumDict, find } from "../helpers/pipes";
-import { isSameOrBeforeDate, isSameDate } from "../helpers/moment-pipes";
-import { shareReplay, take, flatMap, map } from "rxjs/operators";
-import * as moment from "moment";
-import { isSame } from "../helpers/dates";
+import { EntityService } from "./entity.service";
+import { BUDGETS } from "../mocks";
 
 @Injectable({
   providedIn: "root"
 })
-export class BudgetService {
-  budgets$ = this._store.budgets.items$;
-
-  constructor(private _store: StoreService) {}
-
-  create(budget: Viewmodel<Budget>): void {
-    this._store.budgets.add(budget);
+export class BudgetService extends EntityService<Budget> {
+  constructor() {
+    super("budget", BUDGETS);
   }
 
-  update(month: Date, categoryId: string, amount: number): void {
-    const budget = this.find(month, categoryId);
-
-    if (budget) {
-      if (amount !== budget.amount) {
-        budget.amount = amount;
-        this._store.budgets.update(budget);
-      }
-    } else {
-      this.create({
-        month,
-        categoryId,
-        amount
-      });
-    }
+  create(budget: Budget): void {
+    this.add(budget);
   }
 
-  find(month: Date, categoryId: string): Budget | undefined {
-    return this._store.budgets.find(
-      x => x.categoryId === categoryId && isSame(month, x.month, "month")
-    );
-  }
+  // update(month: Date, categoryId: string, amount: number): void {
+  //   const budget = this.find(month, categoryId);
 
-  find$(month: Date, categoryId: string): Observable<Budget | undefined> {
-    return this.budgets$.pipe(
-      find(x => x.categoryId === categoryId && isSame(month, x.month, "month"))
-    );
-  }
+  //   if (budget) {
+  //     if (amount !== budget.amount) {
+  //       budget.amount = amount;
+  //       this.update(budget);
+  //     }
+  //   } else {
+  //     this.create({
+  //       month,
+  //       categoryId,
+  //       amount
+  //     });
+  //   }
+  // }
 
   getBudgeted$(filters: {
     month?: Date;
     categoryId: string;
     maxMonth?: Date;
   }): Observable<number> {
-    return this.budgets$.pipe(
+    return this.entities$.pipe(
       where({ categoryId: filters.categoryId }),
       isSameDate(x => x.month, filters.month, "month"),
       isSameOrBeforeDate(x => x.month, filters.maxMonth, "month"),

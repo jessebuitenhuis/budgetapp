@@ -13,6 +13,9 @@ export class TransactionsTableRowComponent {
   constructor(private _transactionService: TransactionService) {}
 
   update(props: Partial<Transaction>): void {
-    this._transactionService.store.set(this.transaction, props);
+    this._transactionService.update({
+      ...this.transaction,
+      ...props
+    });
   }
 }

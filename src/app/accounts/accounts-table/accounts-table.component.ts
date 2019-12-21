@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Account } from "src/app/models/Account";
-import { Viewmodel } from "src/app/models/types";
 import { AccountService } from "src/app/services/account.service";
 
 @Component({
@@ -18,7 +17,7 @@ export class AccountsTableComponent {
   create(): void {
     this._accountService.add({
       name: this.newAccount
-    });
+    } as Account);
     this.newAccount = "";
   }
 }

@@ -14,7 +14,7 @@ export class AccountsTableRowComponent {
 
   update(props: Partial<Account>): void {
     this._accountService.update({
-      id: this.account.id,
+      ...this.account,
       ...props
     });
   }

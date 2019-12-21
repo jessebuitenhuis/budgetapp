@@ -7,7 +7,7 @@ import { TransactionService } from "../services/transaction.service";
   styleUrls: ["./transactions.component.css"]
 })
 export class TransactionsComponent {
-  transactions$ = this._transactionService.transactions$;
+  transactions$ = this._transactionService.entities$;
 
   constructor(private _transactionService: TransactionService) {}
 

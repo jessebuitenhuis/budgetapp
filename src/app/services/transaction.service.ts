@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
-import { StoreService } from "./store.service";
-import { Transaction } from "../models/Transaction";
-import { Observable, from } from "rxjs";
-import { where, sum, groupBy, sumDict } from "../helpers/pipes";
-import { isSameOrBeforeDate, isSameDate } from "../helpers/moment-pipes";
-import { shareReplay } from "rxjs/operators";
 import * as csv from "csvtojson";
 import * as moment from "moment";
+import { Observable } from "rxjs";
+import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
+import { sum, where } from "../helpers/pipes";
+import { TRANSACTIONS } from "../mocks";
+import { Transaction } from "../models/Transaction";
+import { EntityService } from "./entity.service";
 
 @Injectable({
   providedIn: "root"
 })
-export class TransactionService {
+export class TransactionService extends EntityService<Transaction> {
   static asnColParser = {
     date: (item: string) => moment(item, "DD-MM-YYYY").toDate(),
     field5: "omit",
@@ -55,13 +55,12 @@ export class TransactionService {
     "raw"
   ];
 
-  store = this._storeService.transactions;
-  transactions$ = this.store.items$;
-
-  constructor(private _storeService: StoreService) {}
+  constructor() {
+    super("transaction", TRANSACTIONS);
+  }
 
   getForCategory$(categoryId: string): Observable<Transaction[]> {
-    return this.transactions$.pipe(where(x => x.categoryId === categoryId));
+    return this.entities$.pipe(where(x => x.categoryId === categoryId));
   }
 
   getSpent$(filters: {
@@ -69,16 +68,12 @@ export class TransactionService {
     month?: Date;
     maxMonth?: Date;
   }): Observable<number> {
-    return this.transactions$.pipe(
+    return this.entities$.pipe(
       where({ categoryId: filters.categoryId }),
       isSameDate(x => x.date, filters.month, "month"),
       isSameOrBeforeDate(x => x.date, filters.maxMonth, "month"),
       sum(x => x.amount)
     );
-  }
-
-  update(transaction: Transaction): void {
-    this.store.update(transaction);
   }
 
   uploadCsv(csvContent: string): void {
@@ -89,8 +84,7 @@ export class TransactionService {
     })
       .fromString(csvContent)
       .then((items: Transaction[]) => {
-        this.store.add(items);
-        console.log(items);
+        this.add(items);
       });
   }
 }
