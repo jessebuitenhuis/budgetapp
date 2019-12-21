@@ -1,0 +1,13 @@
+<td>
+  <input
+    type="text"
+    class="form-control-plaintext"
+    [ngModel]="account.name"
+    (ngModelChange)="update({ name: $event })"
+    [ngModelOptions]="{ updateOn: 'blur' }"
+    placeholder="Name..."
+  />
+</td>
+<td>
+  Saldo
+</td>

@@ -1,9 +1,9 @@
 import { Component, OnInit, Optional, Self } from "@angular/core";
 import { AccountService } from "src/app/services/account.service";
-import { StoreService } from "src/app/services/store.service";
 import { AbstractValueAccessor } from "src/app/helpers/AbstractValueAccessor";
 import { NgControl } from "@angular/forms";
 import { Account } from "src/app/models/Account";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-select-account",
@@ -11,18 +11,18 @@ import { Account } from "src/app/models/Account";
   styleUrls: ["./select-account.component.scss"]
 })
 export class SelectAccountComponent extends AbstractValueAccessor<string> {
-  accounts$ = this._storeService.accounts.items$;
+  accounts$ = this._accountService.entities$;
 
   constructor(
     @Optional() @Self() control: NgControl,
-    private _storeService: StoreService
+    private _accountService: AccountService
   ) {
     super(control);
   }
 
-  addTagFn = (name: string): Account => {
-    return this._storeService.accounts.add({
+  addTagFn = (name: string): Observable<Account> => {
+    return this._accountService.add({
       name
-    });
+    } as Account);
   };
 }

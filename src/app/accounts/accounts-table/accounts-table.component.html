@@ -1,0 +1,28 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th class="w-100">Account</th>
+      <th>Saldo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let account of accounts"
+      app-accounts-table-row
+      [account]="account"
+    ></tr>
+    <tr>
+      <td colspan="99">
+        <input
+          type="text"
+          class="form-control-plaintext"
+          placeholder="New account..."
+          [(ngModel)]="newAccount"
+        />
+        <button type="button" (click)="create()" class="btn btn-primary">
+          Create
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
