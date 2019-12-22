@@ -4,7 +4,6 @@ import * as moment from "moment";
 import { Observable } from "rxjs";
 import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
 import { sum, where } from "../helpers/pipes";
-import { TRANSACTIONS } from "../mocks";
 import { Transaction } from "../models/Transaction";
 import { EntityService } from "./entity.service";
 
@@ -35,7 +34,7 @@ export class TransactionService extends EntityService<Transaction> {
 
   static asnColHeaders: (keyof Transaction | "")[] = [
     "date",
-    "accountNumber",
+    "accountId",
     "payeeAccountNumber",
     "payeeName",
     "",
@@ -56,7 +55,7 @@ export class TransactionService extends EntityService<Transaction> {
   ];
 
   constructor() {
-    super("transaction", TRANSACTIONS);
+    super("transaction");
   }
 
   getForCategory$(categoryId: string): Observable<Transaction[]> {

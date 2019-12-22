@@ -3,10 +3,7 @@ import { Observable, of, throwError } from "rxjs";
 import { BaseModel } from "../models/BaseModel";
 
 export class EntityDataService<T extends BaseModel> {
-  constructor(private _name: string, _initialData: T[]) {
-    console.log(this._name);
-    this._setInitialData(_initialData);
-  }
+  constructor(private _name: string) {}
 
   get(): Observable<T[]> {
     return of(this._db);
@@ -39,14 +36,8 @@ export class EntityDataService<T extends BaseModel> {
     return of();
   }
 
-  private _setInitialData(data: T[]): void {
-    if (!localStorage.getItem(this._name)) {
-      this._updateDb(data);
-    }
-  }
-
   private get _db(): T[] {
-    const stored = localStorage.getItem(this._name) || "{}";
+    const stored = localStorage.getItem(this._name) || "[]";
     return JSON.parse(stored);
   }
 

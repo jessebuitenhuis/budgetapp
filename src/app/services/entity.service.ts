@@ -1,7 +1,11 @@
-import { Observable, BehaviorSubject, pipe } from "rxjs";
+import { Observable, BehaviorSubject, pipe, of } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { BaseModel } from "../models/BaseModel";
 import { EntityDataService } from "./entity-data.service";
+import { createSelector } from "../entity/EntityHelpers";
+import { where } from "../helpers/pipes";
+import * as uuid from "uuid/v1";
+import { Viewmodel } from "../models/types";
 
 export interface EntityMap<T> {
   [key: string]: T;
@@ -25,17 +29,16 @@ const toKeys = pipe(
 
 export abstract class EntityService<T extends BaseModel> {
   private _entities$ = new BehaviorSubject<T[]>([]);
+  private _entityDataService = new EntityDataService<T>(this._name);
 
   entities$ = this._entities$.asObservable();
   entityMap$ = this._entities$.pipe(toEntitymap);
   entityKeys$ = this._entities$.pipe(toKeys);
 
-  private _entityDataService = new EntityDataService<T>(
-    this._name,
-    this._initialData
-  );
+  selectById$ = (id: T["id"]) => createSelector(this.entityMap$, x => x[id]);
+  selectByProp$ = (prop: Partial<T>) => this.entities$.pipe(where(prop));
 
-  constructor(private _name: string, private _initialData: T[] = []) {
+  constructor(private _name: string) {
     this.getAll();
   }
 
@@ -46,40 +49,33 @@ export abstract class EntityService<T extends BaseModel> {
       .subscribe(x => this._entities$.next(x));
   }
 
-  add(entity: T): Observable<T>;
-  add(entities: T[]): Observable<T[]>;
-  add(entities: T | T[]): Observable<T | T[]> {
-    const arr = Array.isArray(entities) ? entities : [entities];
+  add(entity: Viewmodel<T>): T;
+  add(entities: Viewmodel<T>[]): T[];
+  add(entities: Viewmodel<T> | Viewmodel<T>[]): T | T[] {
+    const vmArr = Array.isArray(entities) ? entities : [entities];
+    const arr = vmArr.map(item => ({
+      id: this._generateId(),
+      ...item
+    })) as T[];
 
-    return this._entityDataService.post(arr).pipe(
-      map(savedItems => {
-        this._addToCollection(savedItems);
-        return arr;
-      })
-    );
+    this._addToCollection(arr);
+    this._entityDataService.post(arr);
+    return Array.isArray(entities) ? arr : arr[0];
   }
 
-  update(entity: T): Observable<T>;
-  update(entities: T[]): Observable<T[]>;
-  update(entities: T | T[]): Observable<T | T[]> {
+  update(entity: T): T;
+  update(entities: T[]): T[];
+  update(entities: T | T[]): T | T[] {
     const arr = Array.isArray(entities) ? entities : [entities];
-
-    return this._entityDataService.put(arr).pipe(
-      map(savedItems => {
-        this._updateCollection(savedItems);
-        return savedItems;
-      })
-    );
+    this._updateCollection(arr);
+    this._entityDataService.put(arr);
+    return Array.isArray(entities) ? arr : arr[0];
   }
 
-  delete(entities: T | T[]): Observable<void> {
+  delete(entities: T | T[]): void {
     const arr = Array.isArray(entities) ? entities : [entities];
-
-    return this._entityDataService.delete(arr).pipe(
-      map(() => {
-        this._removeFromCollection(arr);
-      })
-    );
+    this._removeFromCollection(arr);
+    this._entityDataService.delete(arr);
   }
 
   private _addToCollection(items: T[]): void {
@@ -96,6 +92,10 @@ export abstract class EntityService<T extends BaseModel> {
 
   private _getKeys(): string[] {
     return this._entities$.value.map(x => x.id);
+  }
+
+  private _generateId(): string {
+    return uuid();
   }
 
   private _getFilteredEntities(excludeItems: T[]): T[] {

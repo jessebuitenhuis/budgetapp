@@ -1,7 +1,7 @@
-<table class="table">
+<app-table [data]="transactions">
   <thead>
     <tr>
-      <th>Date</th>
+      <th>Datee</th>
       <th>Account</th>
       <th>Payee</th>
       <th>Category</th>
@@ -10,10 +10,43 @@
     </tr>
   </thead>
   <tbody>
-    <tr
-      *ngFor="let transaction of transactions"
-      app-transactions-table-row
-      [transaction]="transaction"
-    ></tr>
+    <tr *tableRow="let transaction">
+      <td class="text-nowrap">{{ transaction.date | date }}</td>
+      <td class="py-0">
+        <app-select-account
+          [ngModel]="transaction.accountId"
+          (ngModelChange)="update(transaction, { accountId: $event })"
+        ></app-select-account>
+      </td>
+
+      <td class="py-0">
+        <app-select-payee
+          [ngModel]="transaction.payeeId"
+          (ngModelChange)="update(transaction, { payeeId: $event })"
+        ></app-select-payee>
+      </td>
+      <td class="py-0">
+        <app-select-category
+          [ngModel]="transaction.categoryId"
+          (ngModelChange)="update(transaction, { categoryId: $event })"
+        ></app-select-category>
+      </td>
+      <td class="py-0">
+        <input
+          type="text"
+          class="form-control-plaintext"
+          [ngModel]="transaction.description"
+          (ngModelChange)="update(transaction, { description: $event })"
+          [ngModelOptions]="{ updateOn: 'blur' }"
+          placeholder="Description..."
+        />
+      </td>
+      <td class="py-0">
+        <app-input-currency
+          [ngModel]="transaction.amount"
+          (ngModelChange)="update(transaction, { amount: $event })"
+        ></app-input-currency>
+      </td>
+    </tr>
   </tbody>
-</table>
+</app-table>

@@ -7,15 +7,18 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { AccountsTableComponent } from "./accounts-table/accounts-table.component";
 import { AccountsTableRowComponent } from "./accounts-table/accounts-table-row/accounts-table-row.component";
 import { ComponentsModule } from "../components/components.module";
+import { AccountSummaryComponent } from "./account-summary/account-summary.component";
+
+const components = [SelectAccountComponent, AccountSummaryComponent];
 
 @NgModule({
   imports: [CommonModule, NgSelectModule, FormsModule, ComponentsModule],
   declarations: [
     AccountsComponent,
-    SelectAccountComponent,
     AccountsTableComponent,
-    AccountsTableRowComponent
+    AccountsTableRowComponent,
+    ...components
   ],
-  exports: [SelectAccountComponent]
+  exports: [...components]
 })
 export class AccountsModule {}

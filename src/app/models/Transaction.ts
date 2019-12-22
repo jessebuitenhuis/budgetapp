@@ -2,8 +2,7 @@ import { BaseModel } from "./BaseModel";
 
 export interface Transaction extends BaseModel {
   date: Date;
-  accountNumber?: string;
-  accountId?: string;
+  accountId: string;
 
   categoryId?: string;
   amount: number;

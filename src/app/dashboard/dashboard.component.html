@@ -7,6 +7,18 @@
   ></app-month-picker>
 </header>
 
+<main>
+  <h2>Accounts</h2>
+
+  <div class="d-flex">
+    <app-account-summary
+      *ngFor="let account of accounts$ | async"
+      [account]="account"
+      class="mr-2"
+    ></app-account-summary>
+  </div>
+</main>
+
 <table class="table">
   <thead>
     <tr>

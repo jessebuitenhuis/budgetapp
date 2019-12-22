@@ -1,16 +1,20 @@
 import { Injectable } from "@angular/core";
-import { StoreService } from "./store.service";
 import { Account } from "../models/Account";
-import { Viewmodel } from "../models/types";
 import { EntityService } from "./entity.service";
-import { EntityDataService } from "./entity-data.service";
-import { ACCOUNTS } from "../mocks";
+import { TransactionService } from "./transaction.service";
+import { map } from "rxjs/operators";
+import { sum } from "../helpers/pipes";
 
 @Injectable({
   providedIn: "root"
 })
 export class AccountService extends EntityService<Account> {
-  constructor() {
-    super("account", ACCOUNTS);
+  constructor(private _transactionService: TransactionService) {
+    super("account");
   }
+
+  saldoForAccount$ = (accountId: string) =>
+    this._transactionService
+      .selectByProp$({ accountId })
+      .pipe(sum(x => x.amount));
 }

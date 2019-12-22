@@ -1,0 +1,10 @@
+<table class="table">
+  <ng-content select="thead"></ng-content>
+  <tbody>
+    <ng-container *ngFor="let row of data">
+      <ng-container
+        *ngTemplateOutlet="rowTpl?.templateRef; context: { $implicit: row }"
+      ></ng-container>
+    </ng-container>
+  </tbody>
+</table>

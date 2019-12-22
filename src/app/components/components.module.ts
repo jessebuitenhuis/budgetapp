@@ -5,6 +5,8 @@ import { MomentModule } from "ngx-moment";
 import { InputCurrencyComponent } from "./input-currency/input-currency.component";
 import { FormsModule } from "@angular/forms";
 import { FileUploadComponent } from "./file-upload/file-upload.component";
+import { CardModule } from "./card/card.module";
+import { TableModule } from "./table/table.module";
 
 const components = [
   MonthPickerComponent,
@@ -13,8 +15,8 @@ const components = [
 ];
 
 @NgModule({
-  imports: [CommonModule, MomentModule, FormsModule],
+  imports: [CommonModule, MomentModule, FormsModule, CardModule, TableModule],
   declarations: [...components],
-  exports: [...components]
+  exports: [...components, CardModule, TableModule]
 })
 export class ComponentsModule {}

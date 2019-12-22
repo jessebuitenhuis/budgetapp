@@ -20,9 +20,9 @@ export class SelectPayeeComponent extends AbstractValueAccessor<string> {
     super(control);
   }
 
-  addTagFn = (name: string): Observable<Payee> => {
+  addTagFn = (name: string): Payee => {
     return this._payeeService.add({
       name
-    } as Payee);
+    });
   };
 }

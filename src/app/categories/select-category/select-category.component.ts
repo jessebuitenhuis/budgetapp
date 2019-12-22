@@ -4,6 +4,7 @@ import { NgControl } from "@angular/forms";
 import { Category } from "src/app/models/Category";
 import { CategoryService } from "src/app/services/category.service";
 import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-select-category",
@@ -20,9 +21,9 @@ export class SelectCategoryComponent extends AbstractValueAccessor<string> {
     super(control);
   }
 
-  addTagFn = (name: string): Observable<Category> => {
+  addTagFn = (name: string): Category => {
     return this._categoryService.add({
       name
-    } as Category);
+    });
   };
 }

@@ -4,7 +4,6 @@ import { DashboardService } from "../services/dashboard.service";
 import { switchMap, map } from "rxjs/operators";
 import { TransactionService } from "src/app/services/transaction.service";
 import { BudgetService } from "src/app/services/budget.service";
-import { Store } from "@ngrx/store";
 
 @Component({
   selector: "[app-dashboard-table-row]",

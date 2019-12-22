@@ -4,14 +4,13 @@ import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
 import { sum, where } from "../helpers/pipes";
 import { Budget } from "../models/Budget";
 import { EntityService } from "./entity.service";
-import { BUDGETS } from "../mocks";
 
 @Injectable({
   providedIn: "root"
 })
 export class BudgetService extends EntityService<Budget> {
   constructor() {
-    super("budget", BUDGETS);
+    super("budget");
   }
 
   create(budget: Budget): void {

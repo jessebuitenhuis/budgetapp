@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Account } from "src/app/models/Account";
 import { AccountService } from "src/app/services/account.service";
+import { Viewmodel } from "src/app/models/types";
 
 @Component({
   selector: "app-accounts-table",
@@ -10,14 +11,19 @@ import { AccountService } from "src/app/services/account.service";
 export class AccountsTableComponent {
   @Input() accounts: Account[] = [];
 
-  newAccount: string = "";
+  newAccount = this.createModel();
 
   constructor(private _accountService: AccountService) {}
 
   create(): void {
-    this._accountService.add({
-      name: this.newAccount
-    } as Account);
-    this.newAccount = "";
+    this._accountService.add(this.newAccount);
+    this.newAccount = this.createModel();
+  }
+
+  createModel(): Account {
+    return {
+      name: "",
+      id: ""
+    };
   }
 }

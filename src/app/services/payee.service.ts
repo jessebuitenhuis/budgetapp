@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
-import { EntityService } from "./entity.service";
 import { Payee } from "../models/Payee";
-import { PAYEES } from "../mocks";
+import { EntityService } from "./entity.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class PayeeService extends EntityService<Payee> {
   constructor() {
-    super("payee", PAYEES);
+    super("payee");
   }
 }

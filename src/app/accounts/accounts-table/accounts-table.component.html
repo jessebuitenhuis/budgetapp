@@ -13,15 +13,32 @@
     ></tr>
     <tr>
       <td colspan="99">
-        <input
-          type="text"
-          class="form-control-plaintext"
-          placeholder="New account..."
-          [(ngModel)]="newAccount"
-        />
-        <button type="button" (click)="create()" class="btn btn-primary">
-          Create
-        </button>
+        <form #form="ngForm">
+          <input
+            type="text"
+            class="form-control-plaintext"
+            placeholder="AccountId..."
+            [(ngModel)]="newAccount.id"
+            name="accountId"
+            required
+          />
+          <input
+            type="text"
+            class="form-control-plaintext"
+            placeholder="New account..."
+            [(ngModel)]="newAccount.name"
+            name="accountName"
+            required
+          />
+          <button
+            type="submit"
+            (click)="create()"
+            [disabled]="form.invalid"
+            class="btn btn-primary"
+          >
+            Create
+          </button>
+        </form>
       </td>
     </tr>
   </tbody>
