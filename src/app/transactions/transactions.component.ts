@@ -12,4 +12,8 @@ export class TransactionsComponent {
   onUpload(content: string): void {
     this._transactionService.uploadCsv(content);
   }
+
+  match(): void {
+    this._transactionService.matchUncategorized();
+  }
 }

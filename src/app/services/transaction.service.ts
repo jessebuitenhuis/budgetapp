@@ -6,9 +6,10 @@ import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
 import { sum, where, log } from "../helpers/pipes";
 import { Transaction } from "../models/Transaction";
 import { EntityService } from "./entity.service";
-import { tap } from "rxjs/operators";
+import { tap, map, take } from "rxjs/operators";
 import { PayeeService } from "./payee.service";
 import { AccountService } from "./account.service";
+import { CategoryMatchService } from "./category-match.service";
 
 @Injectable({
   providedIn: "root"
@@ -59,10 +60,13 @@ export class TransactionService extends EntityService<Transaction> {
 
   constructor(
     private _payeeService: PayeeService,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _categoryMatchService: CategoryMatchService
   ) {
     super("transaction");
   }
+
+  uncategorized$ = this.entities$.pipe(where({ categoryId: "" }));
 
   getForCategory$(categoryId?: string): Observable<Transaction[]> {
     return this.entities$.pipe(where({ categoryId }));
@@ -128,5 +132,13 @@ export class TransactionService extends EntityService<Transaction> {
       categoryId: "",
       payeeId: ""
     });
+  }
+
+  matchUncategorized(): void {
+    const uncategorized = this._entities$.value.filter(
+      x => x.categoryId === ""
+    );
+    const matched = this._categoryMatchService.match(uncategorized);
+    this.update(matched);
   }
 }

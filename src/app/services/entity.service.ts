@@ -28,7 +28,7 @@ const toKeys = pipe(
 );
 
 export abstract class EntityService<T extends BaseModel> {
-  private _entities$ = new BehaviorSubject<T[]>([]);
+  protected _entities$ = new BehaviorSubject<T[]>([]);
   private _entityDataService = new EntityDataService<T>(this._name);
 
   entities$ = this._entities$.asObservable().pipe(shareReplay(1));
@@ -85,8 +85,12 @@ export abstract class EntityService<T extends BaseModel> {
     } as T;
   }
 
+  find(predicateFn: (entity: T) => boolean): T | undefined {
+    return this._entities$.value.find(predicateFn);
+  }
+
   findOrCreate(predicateFn: (entity: T) => boolean, data: Viewmodel<T>): T {
-    const item = this._entities$.value.find(predicateFn);
+    const item = this.find(predicateFn);
     if (item) {
       return item;
     } else {
