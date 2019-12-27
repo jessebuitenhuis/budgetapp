@@ -3,9 +3,12 @@ import * as csv from "csvtojson";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
-import { sum, where } from "../helpers/pipes";
+import { sum, where, log } from "../helpers/pipes";
 import { Transaction } from "../models/Transaction";
 import { EntityService } from "./entity.service";
+import { tap } from "rxjs/operators";
+import { PayeeService } from "./payee.service";
+import { AccountService } from "./account.service";
 
 @Injectable({
   providedIn: "root"
@@ -54,21 +57,26 @@ export class TransactionService extends EntityService<Transaction> {
     "raw"
   ];
 
-  constructor() {
+  constructor(
+    private _payeeService: PayeeService,
+    private _accountService: AccountService
+  ) {
     super("transaction");
   }
 
-  getForCategory$(categoryId: string): Observable<Transaction[]> {
-    return this.entities$.pipe(where(x => x.categoryId === categoryId));
+  getForCategory$(categoryId?: string): Observable<Transaction[]> {
+    return this.entities$.pipe(where({ categoryId }));
   }
+
+  saldoForAccount$ = (accountId: string) =>
+    this.selectByProp$({ accountId }).pipe(sum(x => x.amount));
 
   getSpent$(filters: {
     categoryId?: string;
     month?: Date;
     maxMonth?: Date;
   }): Observable<number> {
-    return this.entities$.pipe(
-      where({ categoryId: filters.categoryId }),
+    return this.getForCategory$(filters.categoryId).pipe(
       isSameDate(x => x.date, filters.month, "month"),
       isSameOrBeforeDate(x => x.date, filters.maxMonth, "month"),
       sum(x => x.amount)
@@ -83,7 +91,42 @@ export class TransactionService extends EntityService<Transaction> {
     })
       .fromString(csvContent)
       .then((items: Transaction[]) => {
+        items = items.map(item => this.mapCsvItem(item));
         this.add(items);
       });
+  }
+
+  mapCsvItem(item: Transaction): Transaction {
+    const account = this._accountService.findOrCreate(
+      x => x.id === item.accountId,
+      {
+        id: item.accountId,
+        name: item.accountId
+      }
+    );
+
+    const payee = this._payeeService.findOrCreate(
+      x => x.name === item.payeeName,
+      {
+        name: item.payeeName || ""
+      }
+    );
+
+    return {
+      ...item,
+      categoryId: "",
+      payeeId: payee.id,
+      accountId: account.id
+    };
+  }
+
+  createEntity(): Transaction {
+    return super.createEntity({
+      date: new Date(),
+      accountId: "",
+      amount: 0,
+      categoryId: "",
+      payeeId: ""
+    });
   }
 }

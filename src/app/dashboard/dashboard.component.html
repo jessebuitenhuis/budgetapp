@@ -19,7 +19,7 @@
   </div>
 </main>
 
-<table class="table">
+<app-table [data]="categories$ | async">
   <thead>
     <tr>
       <th class="w-100">Category</th>
@@ -28,9 +28,10 @@
       <th>Available</th>
     </tr>
   </thead>
+  <tr app-dashboard-table-row [category]="noCategory"></tr>
   <tr
-    *ngFor="let category of categories$ | async"
+    *tableRow="let category"
     app-dashboard-table-row
     [category]="category"
   ></tr>
-</table>
+</app-table>

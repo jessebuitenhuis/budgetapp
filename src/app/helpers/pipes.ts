@@ -1,5 +1,5 @@
 import { pipe } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { sum as sumFn, sumDictFn } from "./helpers";
 import {
   where as _where,
@@ -8,6 +8,7 @@ import {
   findWhere as _findWhere
 } from "underscore";
 import * as moment from "moment";
+import { paginate as paginateFn } from "./helpers";
 
 export type FilterFn<T> = (item: T) => boolean;
 export type FilterObj<T> = { [P in keyof T]?: T[P] };
@@ -34,3 +35,6 @@ export const find = <T>(filter: FilterFn<T>) =>
 
 export const groupBy = <T>(key: keyof T & string) =>
   pipe(map((list: T[]) => _groupBy(list, key)));
+
+export const log = <T>(name: string = "") =>
+  pipe(tap((x: T) => console.log(name, x)));

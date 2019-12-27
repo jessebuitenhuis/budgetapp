@@ -4,5 +4,5 @@ import { Directive, TemplateRef } from "@angular/core";
   selector: "[tableRow]"
 })
 export class TableRowDirective {
-  constructor(public templateRef: TemplateRef<HTMLTableRowElement>) {}
+  constructor(public templateRef: TemplateRef<{ $implicit: any }>) {}
 }

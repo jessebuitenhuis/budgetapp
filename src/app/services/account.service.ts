@@ -9,12 +9,7 @@ import { sum } from "../helpers/pipes";
   providedIn: "root"
 })
 export class AccountService extends EntityService<Account> {
-  constructor(private _transactionService: TransactionService) {
+  constructor() {
     super("account");
   }
-
-  saldoForAccount$ = (accountId: string) =>
-    this._transactionService
-      .selectByProp$({ accountId })
-      .pipe(sum(x => x.amount));
 }

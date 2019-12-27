@@ -4,13 +4,14 @@ import { DashboardService } from "../services/dashboard.service";
 import { switchMap, map } from "rxjs/operators";
 import { TransactionService } from "src/app/services/transaction.service";
 import { BudgetService } from "src/app/services/budget.service";
+import { log } from "src/app/helpers/pipes";
 
 @Component({
   selector: "[app-dashboard-table-row]",
   templateUrl: "./dashboard-table-row.component.html",
   styleUrls: ["./dashboard-table-row.component.css"]
 })
-export class DashboardTableRowComponent {
+export class DashboardTableRowComponent implements OnInit {
   @Input() category!: Category;
   selectedMonth$ = this._dashboardService.selectedMonth$;
 
@@ -44,6 +45,10 @@ export class DashboardTableRowComponent {
       })
     )
   );
+
+  ngOnInit(): void {
+    this._transactionService.entities$.pipe(log("here")).subscribe();
+  }
 
   updateBudget(amount: number) {
     const month = this.selectedMonth$.value;

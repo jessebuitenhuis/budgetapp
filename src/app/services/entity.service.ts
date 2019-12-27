@@ -1,5 +1,5 @@
 import { Observable, BehaviorSubject, pipe, of } from "rxjs";
-import { map, take } from "rxjs/operators";
+import { map, take, shareReplay } from "rxjs/operators";
 import { BaseModel } from "../models/BaseModel";
 import { EntityDataService } from "./entity-data.service";
 import { createSelector } from "../entity/EntityHelpers";
@@ -31,7 +31,7 @@ export abstract class EntityService<T extends BaseModel> {
   private _entities$ = new BehaviorSubject<T[]>([]);
   private _entityDataService = new EntityDataService<T>(this._name);
 
-  entities$ = this._entities$.asObservable();
+  entities$ = this._entities$.asObservable().pipe(shareReplay(1));
   entityMap$ = this._entities$.pipe(toEntitymap);
   entityKeys$ = this._entities$.pipe(toKeys);
 
@@ -78,20 +78,42 @@ export abstract class EntityService<T extends BaseModel> {
     this._entityDataService.delete(arr);
   }
 
+  createEntity(data: Viewmodel<T>): T {
+    return {
+      id: this._generateId(),
+      ...data
+    } as T;
+  }
+
+  findOrCreate(predicateFn: (entity: T) => boolean, data: Viewmodel<T>): T {
+    const item = this._entities$.value.find(predicateFn);
+    if (item) {
+      return item;
+    } else {
+      const entity = this.createEntity(data);
+      return this.add(entity);
+    }
+  }
+
   private _addToCollection(items: T[]): void {
     this._entities$.next([...this._entities$.value, ...items]);
   }
 
   private _updateCollection(items: T[]): void {
-    this._entities$.next([...this._getFilteredEntities(items), ...items]);
+    const entities = [...this._entities$.value];
+
+    items.forEach(item => {
+      const index = entities.findIndex(x => x.id === item.id);
+      if (index > -1) {
+        entities.splice(index, 1, item);
+      }
+    });
+
+    this._entities$.next(entities);
   }
 
   private _removeFromCollection(items: T[]): void {
     this._entities$.next([...this._getFilteredEntities(items)]);
-  }
-
-  private _getKeys(): string[] {
-    return this._entities$.value.map(x => x.id);
   }
 
   private _generateId(): string {

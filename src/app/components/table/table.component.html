@@ -1,10 +1,21 @@
 <table class="table">
   <ng-content select="thead"></ng-content>
   <tbody>
-    <ng-container *ngFor="let row of data">
+    <ng-content></ng-content>
+    <ng-container *ngFor="let row of tableData$ | async">
       <ng-container
         *ngTemplateOutlet="rowTpl?.templateRef; context: { $implicit: row }"
       ></ng-container>
     </ng-container>
   </tbody>
 </table>
+
+<ngb-pagination
+  [hidden]="(data$ | async).length <= pageSize"
+  [page]="page$ | async"
+  (pageChange)="page$.next($event)"
+  [pageSize]="pageSize"
+  [maxSize]="10"
+  [boundaryLinks]="true"
+  [collectionSize]="(data$ | async).length"
+></ngb-pagination>

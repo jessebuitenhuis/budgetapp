@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject, combineLatest } from "rxjs";
 import { TransactionService } from "src/app/services/transaction.service";
 import { BudgetService } from "src/app/services/budget.service";
 import { map } from "rxjs/operators";
+import { log } from "src/app/helpers/pipes";
 
 @Injectable()
 export class DashboardService {
@@ -25,7 +26,7 @@ export class DashboardService {
     });
 
     return combineLatest([spent$, budgeted$]).pipe(
-      map(([spent, budgeted]) => budgeted - spent)
+      map(([spent, budgeted]) => budgeted + spent)
     );
   }
 }

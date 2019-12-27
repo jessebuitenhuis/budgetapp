@@ -1,4 +1,4 @@
-<app-table [data]="transactions">
+<app-table [data]="transactions$ | async" [sortFn]="sortFn" [sortDesc]="true">
   <thead>
     <tr>
       <th>Datee</th>
@@ -10,6 +10,9 @@
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <td><input type="date" class="form-control" /></td>
+    </tr>
     <tr *tableRow="let transaction">
       <td class="text-nowrap">{{ transaction.date | date }}</td>
       <td class="py-0">

@@ -12,11 +12,7 @@ export class StoreSet<T extends BaseModel> {
   );
   items$ = this._items$.asObservable().pipe(shareReplay(1));
 
-  constructor(private _initialValue: T[] = []) {
-    this.items$.subscribe(x => {
-      console.log("State updated", x);
-    });
-  }
+  constructor(private _initialValue: T[] = []) {}
 
   // CREATE
   add(item: Viewmodel<T>): T;
