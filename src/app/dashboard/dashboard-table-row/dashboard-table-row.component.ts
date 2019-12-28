@@ -11,7 +11,7 @@ import { log } from "src/app/helpers/pipes";
   templateUrl: "./dashboard-table-row.component.html",
   styleUrls: ["./dashboard-table-row.component.css"]
 })
-export class DashboardTableRowComponent implements OnInit {
+export class DashboardTableRowComponent {
   @Input() category!: Category;
   selectedMonth$ = this._dashboardService.selectedMonth$;
 
@@ -45,10 +45,6 @@ export class DashboardTableRowComponent implements OnInit {
       })
     )
   );
-
-  ngOnInit(): void {
-    this._transactionService.entities$.pipe(log("here")).subscribe();
-  }
 
   updateBudget(amount: number) {
     const month = this.selectedMonth$.value;

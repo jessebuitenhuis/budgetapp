@@ -6,10 +6,11 @@ import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
 import { sum, where, log } from "../helpers/pipes";
 import { Transaction } from "../models/Transaction";
 import { EntityService } from "./entity.service";
-import { tap, map, take } from "rxjs/operators";
+import { tap, map, take, share, shareReplay } from "rxjs/operators";
 import { PayeeService } from "./payee.service";
 import { AccountService } from "./account.service";
-import { CategoryMatchService } from "./category-match.service";
+import { Category } from "../models/Category";
+import { sort } from "../helpers/helpers";
 
 @Injectable({
   providedIn: "root"
@@ -60,17 +61,18 @@ export class TransactionService extends EntityService<Transaction> {
 
   constructor(
     private _payeeService: PayeeService,
-    private _accountService: AccountService,
-    private _categoryMatchService: CategoryMatchService
+    private _accountService: AccountService
   ) {
     super("transaction");
   }
 
   uncategorized$ = this.entities$.pipe(where({ categoryId: "" }));
 
-  getForCategory$(categoryId?: string): Observable<Transaction[]> {
-    return this.entities$.pipe(where({ categoryId }));
-  }
+  getForCategory$ = (categoryId?: string): Observable<Transaction[]> =>
+    this.entities$.pipe(where({ categoryId }), shareReplay(1));
+
+  getForPayee$ = (payeeId: string): Observable<Transaction[]> =>
+    this.entities$.pipe(where({ payeeId }), shareReplay(1));
 
   saldoForAccount$ = (accountId: string) =>
     this.selectByProp$({ accountId }).pipe(sum(x => x.amount));
@@ -101,26 +103,24 @@ export class TransactionService extends EntityService<Transaction> {
   }
 
   mapCsvItem(item: Transaction): Transaction {
-    const account = this._accountService.findOrCreate(
-      x => x.id === item.accountId,
-      {
+    const account =
+      item.accountId &&
+      this._accountService.findOrCreate(x => x.id === item.accountId, {
         id: item.accountId,
         name: item.accountId
-      }
-    );
+      });
 
-    const payee = this._payeeService.findOrCreate(
-      x => x.name === item.payeeName,
-      {
+    const payee =
+      item.payeeName &&
+      this._payeeService.findOrCreate(x => x.name === item.payeeName, {
         name: item.payeeName || ""
-      }
-    );
+      });
 
     return {
       ...item,
       categoryId: "",
-      payeeId: payee.id,
-      accountId: account.id
+      payeeId: payee ? payee.id : "",
+      accountId: account ? account.id : ""
     };
   }
 
@@ -134,11 +134,61 @@ export class TransactionService extends EntityService<Transaction> {
     });
   }
 
-  matchUncategorized(): void {
-    const uncategorized = this._entities$.value.filter(
-      x => x.categoryId === ""
+  getUncategorizedMatches(): Transaction[] {
+    const uncategorized = this.getUncategorized();
+    const matched: Transaction[] = [];
+
+    uncategorized.forEach(transaction => {
+      const categoryId = this.getCategoryMatch(transaction);
+      if (categoryId) {
+        matched.push({
+          ...transaction,
+          categoryId
+        });
+      }
+    });
+
+    return matched;
+  }
+
+  getUncategorized(): Transaction[] {
+    return this._entities$.value.filter(x => x.categoryId === "");
+  }
+
+  getCategorized(): Transaction[] {
+    return this._entities$.value.filter(x => !!x.categoryId);
+  }
+
+  getCategoryMatch(transaction: Transaction): Category["id"] | undefined {
+    const categorized = this.getCategorized();
+
+    // Find match by description && payee
+    let matches = categorized.filter(
+      x =>
+        !!x.description &&
+        x.description === transaction.description &&
+        !!x.payeeId &&
+        x.payeeId === transaction.payeeId
     );
-    const matched = this._categoryMatchService.match(uncategorized);
-    this.update(matched);
+
+    // Find match by payee
+    if (matches.length === 0) {
+      matches = categorized.filter(
+        x => !!x.payeeId && x.payeeId === transaction.payeeId
+      );
+    }
+
+    // Find match by exact description
+    if (matches.length === 0) {
+      matches = categorized.filter(
+        x => !!x.description && x.description === transaction.description
+      );
+    }
+
+    // TODO add more fuzzy searches
+
+    const sorted = sort(matches, x => x.date, true);
+    const categoryId = (sorted[0] && sorted[0].categoryId) || undefined;
+    return categoryId;
   }
 }

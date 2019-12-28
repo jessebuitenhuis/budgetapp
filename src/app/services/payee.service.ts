@@ -9,4 +9,9 @@ export class PayeeService extends EntityService<Payee> {
   constructor() {
     super("payee");
   }
+
+  getName(id: string): string {
+    const payee = this.find(x => x.id === id);
+    return (payee && payee.name) || id;
+  }
 }

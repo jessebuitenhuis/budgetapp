@@ -11,6 +11,8 @@ import localeNl from "@angular/common/locales/nl";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { TransactionsModule } from "./transactions/transactions.module";
+import { MatchTransactionsComponent } from "./transactions/match-transactions/match-transactions.component";
+import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 
 registerLocaleData(localeNl, "nl");
 
@@ -24,9 +26,11 @@ registerLocaleData(localeNl, "nl");
     ComponentsModule,
     MomentModule,
     DashboardModule,
-    TransactionsModule
+    TransactionsModule,
+    NgbModalModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [MatchTransactionsComponent]
 })
 export class AppModule {}

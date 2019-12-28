@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import { Transaction } from "src/app/models/Transaction";
 import { TransactionService } from "src/app/services/transaction.service";
 
@@ -8,14 +8,20 @@ import { TransactionService } from "src/app/services/transaction.service";
   styleUrls: ["./transactions-table-row.component.css"]
 })
 export class TransactionsTableRowComponent {
-  @Input() transaction!: Transaction;
+  @Input() transaction = this._transactionService.createEntity();
+  @Input() showSaveBtn = false;
+  @Output() update = new EventEmitter<Partial<Transaction>>();
 
   constructor(private _transactionService: TransactionService) {}
 
-  update(props: Partial<Transaction>): void {
-    this._transactionService.update({
-      ...this.transaction,
-      ...props
-    });
+  add(): void {
+    this._transactionService.add(this.transaction);
+    this.transaction = this._transactionService.createEntity();
+  }
+
+  remove(): void {
+    if (confirm("Are you sure?")) {
+      this._transactionService.delete(this.transaction);
+    }
   }
 }

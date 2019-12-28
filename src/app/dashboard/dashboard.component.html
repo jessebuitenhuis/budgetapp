@@ -28,10 +28,12 @@
       <th>Available</th>
     </tr>
   </thead>
-  <tr app-dashboard-table-row [category]="noCategory"></tr>
   <tr
     *tableRow="let category"
     app-dashboard-table-row
     [category]="category"
   ></tr>
+  <tfoot>
+    <tr app-dashboard-table-row [category]="noCategory"></tr>
+  </tfoot>
 </app-table>

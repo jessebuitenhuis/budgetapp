@@ -2,20 +2,20 @@
 <td class="py-0">
   <app-select-account
     [ngModel]="transaction.accountId"
-    (ngModelChange)="update({ accountId: $event })"
+    (ngModelChange)="update.next({ accountId: $event })"
   ></app-select-account>
 </td>
 
 <td class="py-0">
   <app-select-payee
     [ngModel]="transaction.payeeId"
-    (ngModelChange)="update({ payeeId: $event })"
+    (ngModelChange)="update.next({ payeeId: $event })"
   ></app-select-payee>
 </td>
 <td class="py-0">
   <app-select-category
     [ngModel]="transaction.categoryId"
-    (ngModelChange)="update({ categoryId: $event })"
+    (ngModelChange)="update.next({ categoryId: $event })"
   ></app-select-category>
 </td>
 <td class="py-0">
@@ -23,7 +23,7 @@
     type="text"
     class="form-control-plaintext"
     [ngModel]="transaction.description"
-    (ngModelChange)="update({ description: $event })"
+    (ngModelChange)="update.next({ description: $event })"
     [ngModelOptions]="{ updateOn: 'blur' }"
     placeholder="Description..."
   />
@@ -31,6 +31,25 @@
 <td class="py-0">
   <app-input-currency
     [ngModel]="transaction.amount"
-    (ngModelChange)="update({ amount: $event })"
+    (ngModelChange)="update.next({ amount: $event })"
   ></app-input-currency>
+</td>
+<td>
+  <button
+    *ngIf="showSaveBtn"
+    type="button"
+    class="btn btn-primary"
+    (click)="add()"
+  >
+    Add
+  </button>
+
+  <button
+    *ngIf="!showSaveBtn"
+    type="button"
+    class="btn btn-danger"
+    (click)="remove()"
+  >
+    Remove
+  </button>
 </td>

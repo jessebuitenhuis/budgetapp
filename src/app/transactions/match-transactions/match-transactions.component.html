@@ -1,0 +1,32 @@
+<header class="modal-header">
+  <h4>Match transactions</h4>
+</header>
+<main class="modal-body">
+  <table class="table">
+    <tr *ngFor="let item of items">
+      <td>
+        <div class="form-check">
+          <input
+            class="form-check-input position-static"
+            type="checkbox"
+            [(ngModel)]="item.selected"
+            id="defaultCheck1"
+          />
+        </div>
+      </td>
+      <td>{{ item.transaction.date | date }}</td>
+      <td>{{ item.transaction.payeeId | payee }}</td>
+      <td>{{ item.transaction.description }}</td>
+      <td>{{ item.transaction.amount }}</td>
+      <td>
+        <app-select-category
+          [(ngModel)]="item.transaction.categoryId"
+        ></app-select-category>
+      </td>
+    </tr>
+  </table>
+</main>
+<footer class="modal-footer">
+  <button type="button" (click)="cancel()" class="btn btn-link">Cancel</button>
+  <button type="button" (click)="match()" class="btn btn-primary">Match</button>
+</footer>

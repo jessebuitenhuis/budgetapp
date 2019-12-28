@@ -8,6 +8,7 @@ import { FormsModule } from "@angular/forms";
 import { AccountsModule } from "../accounts/accounts.module";
 import { PayeesModule } from "../payees/payees.module";
 import { CategoriesModule } from "../categories/categories.module";
+import { MatchTransactionsComponent } from "./match-transactions/match-transactions.component";
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { CategoriesModule } from "../categories/categories.module";
   declarations: [
     TransactionsComponent,
     TransactionsTableComponent,
-    TransactionsTableRowComponent
+    TransactionsTableRowComponent,
+    MatchTransactionsComponent
   ]
 })
 export class TransactionsModule {}

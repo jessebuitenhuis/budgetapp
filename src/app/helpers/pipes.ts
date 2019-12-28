@@ -16,8 +16,8 @@ export type FilterObj<T> = { [P in keyof T]?: T[P] };
 export const sumDict = <T>(amountFn: (item: T) => number) =>
   pipe(map((dict: Dictionary<T[]>) => sumDictFn(dict, amountFn)));
 
-export const sum = <T>(amountFn: (item: T) => number) =>
-  pipe(map((list: T[]) => sumFn(list, amountFn)));
+export const sum = <T>(amountFn: (item: T) => number, start = 0) =>
+  pipe(map((list: T[]) => sumFn(list, amountFn, start)));
 
 export const where = <T, U extends FilterObj<T>>(filter: FilterFn<T> | U) =>
   pipe(

@@ -1,9 +1,13 @@
 import { Dictionary, mapObject } from "underscore";
 
-export function sum<T>(items: T[], amountFn: (item: T) => number): number {
+export function sum<T>(
+  items: T[],
+  amountFn: (item: T) => number,
+  start = 0
+): number {
   return items.reduce((total, item) => {
     return total + amountFn(item);
-  }, 0);
+  }, start);
 }
 
 export function sumDictFn<T>(

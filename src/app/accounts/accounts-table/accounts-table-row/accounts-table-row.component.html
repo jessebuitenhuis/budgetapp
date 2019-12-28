@@ -9,5 +9,9 @@
   />
 </td>
 <td>
-  Saldo
+  <app-input-currency
+    [ngModel]="account.startSaldo"
+    (ngModelChange)="update({ startSaldo: $event })"
+    [ngModelOptions]="{ updateOn: 'blur' }"
+  ></app-input-currency>
 </td>

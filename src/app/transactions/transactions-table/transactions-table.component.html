@@ -1,3 +1,16 @@
+<div class="form-check">
+  <input
+    class="form-check-input"
+    type="checkbox"
+    id="onlyShowUncategorized"
+    [ngModel]="onlyShowUncategorized$ | async"
+    (ngModelChange)="onlyShowUncategorized$.next($event)"
+  />
+  <label class="form-check-label" for="onlyShowUncategorized">
+    Only show uncategorized
+  </label>
+</div>
+
 <app-table [data]="transactions$ | async" [sortFn]="sortFn" [sortDesc]="true">
   <thead>
     <tr>
@@ -7,49 +20,14 @@
       <th>Category</th>
       <th class="w-100">Description</th>
       <th>Amount</th>
+      <th></th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <td><input type="date" class="form-control" /></td>
-    </tr>
-    <tr *tableRow="let transaction">
-      <td class="text-nowrap">{{ transaction.date | date }}</td>
-      <td class="py-0">
-        <app-select-account
-          [ngModel]="transaction.accountId"
-          (ngModelChange)="update(transaction, { accountId: $event })"
-        ></app-select-account>
-      </td>
-
-      <td class="py-0">
-        <app-select-payee
-          [ngModel]="transaction.payeeId"
-          (ngModelChange)="update(transaction, { payeeId: $event })"
-        ></app-select-payee>
-      </td>
-      <td class="py-0">
-        <app-select-category
-          [ngModel]="transaction.categoryId"
-          (ngModelChange)="update(transaction, { categoryId: $event })"
-        ></app-select-category>
-      </td>
-      <td class="py-0">
-        <input
-          type="text"
-          class="form-control-plaintext"
-          [ngModel]="transaction.description"
-          (ngModelChange)="update(transaction, { description: $event })"
-          [ngModelOptions]="{ updateOn: 'blur' }"
-          placeholder="Description..."
-        />
-      </td>
-      <td class="py-0">
-        <app-input-currency
-          [ngModel]="transaction.amount"
-          (ngModelChange)="update(transaction, { amount: $event })"
-        ></app-input-currency>
-      </td>
-    </tr>
-  </tbody>
+  <tr class="table-light" app-transactions-table-row [showSaveBtn]="true"></tr>
+  <tr
+    *tableRow="let transaction"
+    app-transactions-table-row
+    [transaction]="transaction"
+    (update)="update(transaction, $event)"
+  ></tr>
 </app-table>
