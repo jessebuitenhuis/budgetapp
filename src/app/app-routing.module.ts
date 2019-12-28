@@ -7,6 +7,7 @@ import { AccountsComponent } from "./accounts/accounts.component";
 const routes: Routes = [
   { path: "", component: DashboardComponent },
   { path: "transactions", component: TransactionsComponent },
+  { path: "transactions/:id", component: TransactionsComponent },
   { path: "accounts", component: AccountsComponent }
 ];
 

@@ -7,11 +7,13 @@ import { FormsModule } from "@angular/forms";
 import { FileUploadComponent } from "./file-upload/file-upload.component";
 import { CardModule } from "./card/card.module";
 import { TableModule } from "./table/table.module";
+import { InputDateComponent } from "./input-date/input-date.component";
 
 const components = [
   MonthPickerComponent,
   InputCurrencyComponent,
-  FileUploadComponent
+  FileUploadComponent,
+  InputDateComponent
 ];
 
 @NgModule({

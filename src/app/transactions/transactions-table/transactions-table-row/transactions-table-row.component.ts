@@ -8,20 +8,27 @@ import { TransactionService } from "src/app/services/transaction.service";
   styleUrls: ["./transactions-table-row.component.css"]
 })
 export class TransactionsTableRowComponent {
-  @Input() transaction = this._transactionService.createEntity();
+  private _transaction: Transaction = this._transactionService.createEntity();
+  @Input() set transaction(val: Transaction) {
+    this._transaction = { ...val };
+  }
+  get transaction(): Transaction {
+    return this._transaction;
+  }
   @Input() showSaveBtn = false;
   @Output() update = new EventEmitter<Partial<Transaction>>();
+  @Output() save = new EventEmitter<void>();
 
   constructor(private _transactionService: TransactionService) {}
-
-  add(): void {
-    this._transactionService.add(this.transaction);
-    this.transaction = this._transactionService.createEntity();
-  }
 
   remove(): void {
     if (confirm("Are you sure?")) {
       this._transactionService.delete(this.transaction);
     }
+  }
+
+  add(): void {
+    this._transactionService.add(this._transaction);
+    this._transaction = this._transactionService.createEntity();
   }
 }

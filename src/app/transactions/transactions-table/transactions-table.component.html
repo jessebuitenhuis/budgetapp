@@ -11,7 +11,12 @@
   </label>
 </div>
 
-<app-table [data]="transactions$ | async" [sortFn]="sortFn" [sortDesc]="true">
+<app-table
+  [data]="transactions$ | async"
+  [sortFn]="sortFn"
+  [sortDesc]="true"
+  pageSize="25"
+>
   <thead>
     <tr>
       <th>Datee</th>

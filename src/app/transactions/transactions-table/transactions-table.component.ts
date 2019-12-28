@@ -2,10 +2,11 @@ import { Component, OnInit, Input } from "@angular/core";
 import { Transaction } from "src/app/models/Transaction";
 import { TransactionService } from "src/app/services/transaction.service";
 import { SortFn } from "src/app/helpers/helpers";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MatchTransactionsComponent } from "../match-transactions/match-transactions.component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-transactions-table",
@@ -14,25 +15,46 @@ import { MatchTransactionsComponent } from "../match-transactions/match-transact
 })
 export class TransactionsTableComponent {
   onlyShowUncategorized$ = new BehaviorSubject(false);
-
-  transactions$ = this.onlyShowUncategorized$.pipe(
-    switchMap(onlyShowUncategorized =>
-      onlyShowUncategorized
-        ? this._transactionService.uncategorized$
-        : this._transactionService.entities$
-    )
+  accountId$ = this._activatedRoute.paramMap.pipe(
+    map(x => x.get("id") || null)
   );
+
+  transactions$ = this.accountId$.pipe(
+    switchMap(accountId => {
+      return accountId
+        ? this._transactionService.getForAccount$(accountId)
+        : this._transactionService.entities$;
+    })
+  );
+  // combineLatest([
+  //   this.onlyShowUncategorized$,
+  //   this.accountId$
+  // ]).pipe(
+  //   switchMap(([onlyShowUncategorized, accountId]) => {
+  //     console.log(onlyShowUncategorized, accountId);
+  //     return accountId
+  //       ? this._transactionService.getForAccount$(accountId)
+  //       : this._transactionService.entities$;
+  //     return entities$.pipe(
+  //       map(entities =>
+  //         onlyShowUncategorized
+  //           ? entities.filter(x => !!x.categoryId)
+  //           : entities
+  //       )
+  //     );
+  //   })
+  // );
 
   newTransaction: Transaction = this._transactionService.createEntity();
   sortFn: SortFn<Transaction> = item => item.date;
 
   constructor(
     private _transactionService: TransactionService,
+    private _activatedRoute: ActivatedRoute,
     private ngbModal: NgbModal
   ) {}
 
   update(transaction: Transaction, props: Partial<Transaction>): void {
-    console.log(transaction, props);
     this._transactionService.update({
       ...transaction,
       ...props

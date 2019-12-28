@@ -8,11 +8,18 @@ import { AccountsTableComponent } from "./accounts-table/accounts-table.componen
 import { AccountsTableRowComponent } from "./accounts-table/accounts-table-row/accounts-table-row.component";
 import { ComponentsModule } from "../components/components.module";
 import { AccountSummaryComponent } from "./account-summary/account-summary.component";
+import { RouterModule } from "@angular/router";
 
 const components = [SelectAccountComponent, AccountSummaryComponent];
 
 @NgModule({
-  imports: [CommonModule, NgSelectModule, FormsModule, ComponentsModule],
+  imports: [
+    CommonModule,
+    NgSelectModule,
+    FormsModule,
+    ComponentsModule,
+    RouterModule
+  ],
   declarations: [
     AccountsComponent,
     AccountsTableComponent,

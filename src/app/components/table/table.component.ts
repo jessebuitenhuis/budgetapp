@@ -22,6 +22,7 @@ export class TableComponent<T> {
   );
 
   @Input() set data(val: T[]) {
+    console.log(val);
     this.data$.next(val);
   }
   @Input() pageSize: number = 10;

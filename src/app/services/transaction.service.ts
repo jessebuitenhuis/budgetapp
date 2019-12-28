@@ -68,6 +68,9 @@ export class TransactionService extends EntityService<Transaction> {
 
   uncategorized$ = this.entities$.pipe(where({ categoryId: "" }));
 
+  getForAccount$ = (accountId: string) =>
+    this.entities$.pipe(where({ accountId }), shareReplay(1));
+
   getForCategory$ = (categoryId?: string): Observable<Transaction[]> =>
     this.entities$.pipe(where({ categoryId }), shareReplay(1));
 
@@ -97,6 +100,12 @@ export class TransactionService extends EntityService<Transaction> {
     })
       .fromString(csvContent)
       .then((items: Transaction[]) => {
+        items = items.filter(
+          item =>
+            this._entities$.value.findIndex(
+              x => x.raw && x.raw === item.raw
+            ) === -1
+        );
         items = items.map(item => this.mapCsvItem(item));
         this.add(items);
       });

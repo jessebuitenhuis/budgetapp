@@ -1,20 +1,22 @@
-<td class="text-nowrap">{{ transaction.date | date }}</td>
+<td class="text-nowrap">
+  <app-input-date [(ngModel)]="transaction.date"></app-input-date>
+</td>
 <td class="py-0">
   <app-select-account
-    [ngModel]="transaction.accountId"
+    [(ngModel)]="transaction.accountId"
     (ngModelChange)="update.next({ accountId: $event })"
   ></app-select-account>
 </td>
 
 <td class="py-0">
   <app-select-payee
-    [ngModel]="transaction.payeeId"
+    [(ngModel)]="transaction.payeeId"
     (ngModelChange)="update.next({ payeeId: $event })"
   ></app-select-payee>
 </td>
 <td class="py-0">
   <app-select-category
-    [ngModel]="transaction.categoryId"
+    [(ngModel)]="transaction.categoryId"
     (ngModelChange)="update.next({ categoryId: $event })"
   ></app-select-category>
 </td>
@@ -22,7 +24,7 @@
   <input
     type="text"
     class="form-control-plaintext"
-    [ngModel]="transaction.description"
+    [(ngModel)]="transaction.description"
     (ngModelChange)="update.next({ description: $event })"
     [ngModelOptions]="{ updateOn: 'blur' }"
     placeholder="Description..."
@@ -30,7 +32,7 @@
 </td>
 <td class="py-0">
   <app-input-currency
-    [ngModel]="transaction.amount"
+    [(ngModel)]="transaction.amount"
     (ngModelChange)="update.next({ amount: $event })"
   ></app-input-currency>
 </td>

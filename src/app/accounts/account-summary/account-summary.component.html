@@ -1,4 +1,8 @@
 <card>
-  <card-header>{{ account.name }}</card-header>
+  <card-header>
+    <a [routerLink]="['/transactions', account.id]">{{
+      account.name
+    }}</a></card-header
+  >
   <card-body>{{ saldo$ | async | currency: "EUR" }}</card-body>
 </card>
