@@ -20,7 +20,6 @@ export class InputDateComponent extends AbstractValueAccessor<Date> {
 
   writeValue(val: Date): void {
     this._date = val ? this.format(val) : "";
-    console.log(this._date);
   }
 
   parse(val: string): Date {
