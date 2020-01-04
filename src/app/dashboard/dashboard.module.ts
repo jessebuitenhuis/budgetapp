@@ -6,6 +6,8 @@ import { DashboardTableRowComponent } from "./dashboard-table-row/dashboard-tabl
 import { FormsModule } from "@angular/forms";
 import { AccountsModule } from "../accounts/accounts.module";
 import { TableModule } from "../components/table/table.module";
+import { DashboardChartsComponent } from "./dashboard-charts/dashboard-charts.component";
+import { ChartsModule } from "../components/charts/charts.module";
 
 @NgModule({
   imports: [
@@ -13,8 +15,13 @@ import { TableModule } from "../components/table/table.module";
     ComponentsModule,
     FormsModule,
     AccountsModule,
-    TableModule
+    TableModule,
+    ChartsModule
   ],
-  declarations: [DashboardComponent, DashboardTableRowComponent]
+  declarations: [
+    DashboardComponent,
+    DashboardTableRowComponent,
+    DashboardChartsComponent
+  ]
 })
 export class DashboardModule {}

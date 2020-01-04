@@ -99,6 +99,11 @@ export abstract class EntityService<T extends BaseModel> {
     }
   }
 
+  getProp<K extends keyof T>(id: T["id"], prop: K): T[K] | undefined {
+    const item = this.find(x => x.id === id);
+    return item && item[prop];
+  }
+
   private _addToCollection(items: T[]): void {
     this._entities$.next([...this._entities$.value, ...items]);
   }

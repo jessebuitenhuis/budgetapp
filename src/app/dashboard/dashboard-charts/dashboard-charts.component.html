@@ -1,0 +1,24 @@
+<div class="row h-100">
+  <app-doughnut-chart
+    class="col"
+    [data]="(incomeChartData$ | async).data"
+    [labels]="(incomeChartData$ | async).labels"
+    [options]="chartOptions"
+  >
+    <h3 class="text-secondary">Income</h3>
+    <h2>{{ income$ | async | currency: "EUR" }}</h2>
+  </app-doughnut-chart>
+  <app-doughnut-chart class="col" [options]="chartOptions">
+    <h3 class="text-secondary">Left to spend</h3>
+    <h2>{{ netto$ | async | currency: "EUR" }}</h2>
+  </app-doughnut-chart>
+  <app-doughnut-chart
+    class="col"
+    [data]="(expensesChartData$ | async).data"
+    [labels]="(expensesChartData$ | async).labels"
+    [options]="chartOptions"
+  >
+    <h3 class="text-secondary">Expenses</h3>
+    <h2>{{ expenses$ | async | currency: "EUR" }}</h2>
+  </app-doughnut-chart>
+</div>

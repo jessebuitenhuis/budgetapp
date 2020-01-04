@@ -5,3 +5,10 @@
 @import "./styles/bootstrap-custom";
 @import "./styles/_forms";
 @import "./styles/tables";
+
+.position-absolute-center {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
