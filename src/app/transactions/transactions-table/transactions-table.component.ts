@@ -26,24 +26,6 @@ export class TransactionsTableComponent {
         : this._transactionService.entities$;
     })
   );
-  // combineLatest([
-  //   this.onlyShowUncategorized$,
-  //   this.accountId$
-  // ]).pipe(
-  //   switchMap(([onlyShowUncategorized, accountId]) => {
-  //     console.log(onlyShowUncategorized, accountId);
-  //     return accountId
-  //       ? this._transactionService.getForAccount$(accountId)
-  //       : this._transactionService.entities$;
-  //     return entities$.pipe(
-  //       map(entities =>
-  //         onlyShowUncategorized
-  //           ? entities.filter(x => !!x.categoryId)
-  //           : entities
-  //       )
-  //     );
-  //   })
-  // );
 
   newTransaction: Transaction = this._transactionService.createEntity();
   sortFn: SortFn<Transaction> = item => item.date;

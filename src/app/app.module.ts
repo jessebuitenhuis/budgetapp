@@ -13,6 +13,7 @@ import { DashboardModule } from "./dashboard/dashboard.module";
 import { TransactionsModule } from "./transactions/transactions.module";
 import { MatchTransactionsComponent } from "./transactions/match-transactions/match-transactions.component";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
+import { PipesModule } from "./pipes/pipes.module";
 
 registerLocaleData(localeNl, "nl");
 
@@ -27,7 +28,8 @@ registerLocaleData(localeNl, "nl");
     MomentModule,
     DashboardModule,
     TransactionsModule,
-    NgbModalModule
+    NgbModalModule,
+    PipesModule
   ],
   providers: [],
   bootstrap: [AppComponent],

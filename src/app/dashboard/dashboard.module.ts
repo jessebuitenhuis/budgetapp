@@ -8,6 +8,7 @@ import { AccountsModule } from "../accounts/accounts.module";
 import { TableModule } from "../components/table/table.module";
 import { DashboardChartsComponent } from "./dashboard-charts/dashboard-charts.component";
 import { ChartsModule } from "../components/charts/charts.module";
+import { PipesModule } from "../pipes/pipes.module";
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ChartsModule } from "../components/charts/charts.module";
     FormsModule,
     AccountsModule,
     TableModule,
-    ChartsModule
+    ChartsModule,
+    PipesModule
   ],
   declarations: [
     DashboardComponent,

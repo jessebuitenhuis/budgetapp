@@ -3,22 +3,27 @@
     class="col"
     [data]="(incomeChartData$ | async).data"
     [labels]="(incomeChartData$ | async).labels"
+    [tooltipFn]="tooltipFn"
+    name="Income"
+    [value]="income$ | async | currency: 'EUR'"
     [options]="chartOptions"
   >
-    <h3 class="text-secondary">Income</h3>
-    <h2>{{ income$ | async | currency: "EUR" }}</h2>
   </app-doughnut-chart>
-  <app-doughnut-chart class="col" [options]="chartOptions">
-    <h3 class="text-secondary">Left to spend</h3>
-    <h2>{{ netto$ | async | currency: "EUR" }}</h2>
+  <app-doughnut-chart
+    class="col"
+    name="Left to spend"
+    [value]="netto$ | async | currency"
+    [options]="chartOptions"
+  >
   </app-doughnut-chart>
   <app-doughnut-chart
     class="col"
     [data]="(expensesChartData$ | async).data"
     [labels]="(expensesChartData$ | async).labels"
+    [tooltipFn]="tooltipFn"
     [options]="chartOptions"
+    name="Expenses"
+    [value]="expenses$ | async | currency: 'EUR'"
   >
-    <h3 class="text-secondary">Expenses</h3>
-    <h2>{{ expenses$ | async | currency: "EUR" }}</h2>
   </app-doughnut-chart>
 </div>

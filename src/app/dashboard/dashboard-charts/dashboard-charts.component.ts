@@ -7,6 +7,8 @@ import { TransactionService } from "src/app/services/transaction.service";
 import { Dictionary } from "underscore";
 import { DashboardService } from "../services/dashboard.service";
 import { CategoryService } from "src/app/services/category.service";
+import { TooltipLabel } from "src/app/components/charts/AbstractChartComponent";
+import { CurrencyPipe } from "@angular/common";
 
 interface ChartData {
   labels?: Label[];
@@ -58,6 +60,14 @@ export class DashboardChartsComponent implements OnInit {
     cutoutPercentage: 80
   };
 
+  tooltipFn = (tooltip: TooltipLabel): TooltipLabel => {
+    return {
+      ...tooltip,
+      value:
+        new CurrencyPipe("nl-NL").transform(tooltip.value, "EUR") || undefined
+    };
+  };
+
   constructor(
     private _dashboardService: DashboardService,
     private _transactionService: TransactionService,
@@ -68,7 +78,7 @@ export class DashboardChartsComponent implements OnInit {
 
   mapToChartData(groupedByCat: Dictionary<number>): ChartData {
     const labels = Object.keys(groupedByCat).map(
-      id => this._categoryService.getProp(id, "name") || ""
+      id => this._categoryService.getProp(id, "name") || "Uncategorized"
     );
     const data = [{ data: Object.values(groupedByCat) }];
     return { labels, data };
