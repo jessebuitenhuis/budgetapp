@@ -12,9 +12,17 @@ export function sum<T>(
 
 export function sumDictFn<T>(
   dict: Dictionary<T[]>,
-  amountFn: (item: T) => number
+  amountFn: (item: T) => number,
+  cumulative: boolean = false
 ): { [key: string]: number } {
-  return mapObject(dict, group => sum(group, amountFn));
+  let total = 0;
+
+  return mapObject(dict, group => {
+    const start = cumulative ? total : 0;
+    total = sum(group, amountFn, start);
+    console.log(start, total);
+    return total;
+  });
 }
 
 export function paginate<T>(
@@ -46,4 +54,12 @@ export function sort<T>(
       return 0;
     }
   });
+}
+
+export function sortObject<T extends { [key: string]: any }>(obj: T): T {
+  return Object.keys(obj)
+    .sort()
+    .reduce((output, key) => {
+      return { ...output, [key]: obj[key] };
+    }, {} as T);
 }

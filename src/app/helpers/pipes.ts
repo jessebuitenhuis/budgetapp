@@ -13,8 +13,11 @@ import { paginate as paginateFn } from "./helpers";
 export type FilterFn<T> = (item: T) => boolean;
 export type FilterObj<T> = { [P in keyof T]?: T[P] };
 
-export const sumDict = <T>(amountFn: (item: T) => number) =>
-  pipe(map((dict: Dictionary<T[]>) => sumDictFn(dict, amountFn)));
+export const sumDict = <T>(
+  amountFn: (item: T) => number,
+  cumulative: boolean = false
+) =>
+  pipe(map((dict: Dictionary<T[]>) => sumDictFn(dict, amountFn, cumulative)));
 
 export const sum = <T>(amountFn: (item: T) => number, start = 0) =>
   pipe(map((list: T[]) => sumFn(list, amountFn, start)));

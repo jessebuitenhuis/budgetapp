@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Account } from "../models/Account";
+import { Account, assetsFilter, liabilitiesFilter } from "../models/Account";
 import { EntityService } from "./entity.service";
 import { TransactionService } from "./transaction.service";
 import { map } from "rxjs/operators";
@@ -12,4 +12,8 @@ export class AccountService extends EntityService<Account> {
   constructor() {
     super("account");
   }
+
+  assetAccounts$ = this.entities$.pipe(assetsFilter);
+
+  liabilityAccounts$ = this.entities$.pipe(liabilitiesFilter);
 }

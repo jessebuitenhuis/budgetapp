@@ -1,6 +1,8 @@
 import * as moment from "moment";
 import { pipe } from "rxjs";
 import { map } from "rxjs/operators";
+import { groupBy } from "underscore";
+import { sortObject } from "./helpers";
 
 type MomentFns =
   | "isBefore"
@@ -34,3 +36,18 @@ export const isAfterDate = momentPipeFactory("isAfter");
 export const isSameDate = momentPipeFactory("isSame");
 export const isSameOrAfterDate = momentPipeFactory("isSameOrAfter");
 export const isSameOrBeforeDate = momentPipeFactory("isSameOrBefore");
+
+export const groupByMonth = <T>(dateFn: (item: T) => Date) =>
+  pipe(
+    map((list: T[]) => {
+      const grouped = groupBy(list, x => {
+        const date = dateFn(x);
+        const _moment = moment(date);
+        return _moment.format("YYYY-MM");
+      });
+
+      const sorted = sortObject(grouped);
+      console.log(grouped, sorted);
+      return sorted;
+    })
+  );

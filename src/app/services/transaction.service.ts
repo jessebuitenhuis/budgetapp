@@ -2,10 +2,14 @@ import { Injectable } from "@angular/core";
 import * as csv from "csvtojson";
 import * as moment from "moment";
 import { Observable, pipe } from "rxjs";
-import { isSameDate, isSameOrBeforeDate } from "../helpers/moment-pipes";
+import {
+  isSameDate,
+  isSameOrBeforeDate,
+  groupByMonth
+} from "../helpers/moment-pipes";
 import { sum, where, log, groupBy, sumDict } from "../helpers/pipes";
 import { EntityService } from "./entity.service";
-import { tap, map, take, share, shareReplay } from "rxjs/operators";
+import { tap, map, take, share, shareReplay, switchMap } from "rxjs/operators";
 import { PayeeService } from "./payee.service";
 import { AccountService } from "./account.service";
 import { Category } from "../models/Category";
@@ -16,6 +20,7 @@ import {
   expensesFilter,
   includeInCalcFilter
 } from "../models/Transaction";
+import { assetsFilter } from "../models/Account";
 
 @Injectable({
   providedIn: "root"
@@ -79,6 +84,9 @@ export class TransactionService extends EntityService<Transaction> {
   getForAccount$ = (accountId: string) =>
     this.entities$.pipe(where({ accountId }), shareReplay(1));
 
+  getForAccounts$ = (accountIds: string[]) =>
+    this.entities$.pipe(where(x => accountIds.includes(x.accountId)));
+
   getForCategory$ = (categoryId?: string): Observable<Transaction[]> =>
     this.entities$.pipe(where({ categoryId }), shareReplay(1));
 
@@ -91,10 +99,37 @@ export class TransactionService extends EntityService<Transaction> {
   saldoForAccount$ = (accountId: string) =>
     this.selectByProp$({ accountId }).pipe(sum(x => x.amount));
 
+  assetsSaldoByMonth$ = () =>
+    this._accountService.assetAccounts$.pipe(
+      switchMap(accounts => this.getForAccounts$(accounts.map(x => x.id))),
+      groupByMonth(x => x.date),
+      sumDict(x => x.amount, true)
+    );
+
+  liabilitiesSaldoByMonth$ = () =>
+    this._accountService.liabilityAccounts$.pipe(
+      switchMap(accounts => this.getForAccounts$(accounts.map(x => x.id))),
+      groupByMonth(x => x.date),
+      sumDict(x => x.amount, true)
+    );
+
+  saldoByMonth$ = () =>
+    this.entities$.pipe(
+      groupByMonth(x => x.date),
+      sumDict(x => x.amount, true)
+    );
+
   incomeForMonth$ = (month: Date) =>
     this.getForMonth$(month).pipe(
       incomeFilter,
       sum(x => x.amount)
+    );
+
+  incomeByMonth$ = () =>
+    this.entities$.pipe(
+      incomeFilter,
+      groupByMonth(x => x.date),
+      sumDict(x => x.amount)
     );
 
   incomeForMonthByCategory$ = (month: Date) =>
@@ -110,6 +145,13 @@ export class TransactionService extends EntityService<Transaction> {
       sum(x => x.amount)
     );
 
+  expensesByMonth$ = () =>
+    this.entities$.pipe(
+      expensesFilter,
+      groupByMonth(x => x.date),
+      sumDict(x => x.amount)
+    );
+
   expensesForMonthByCategory$ = (month: Date) =>
     this.getForMonth$(month).pipe(
       expensesFilter,
@@ -121,6 +163,13 @@ export class TransactionService extends EntityService<Transaction> {
     this.getForMonth$(month).pipe(
       includeInCalcFilter,
       sum(x => x.amount)
+    );
+
+  nettoByMonth$ = () =>
+    this.entities$.pipe(
+      includeInCalcFilter,
+      groupByMonth(x => x.date),
+      sumDict(x => x.amount)
     );
 
   getSpent$(filters: {
@@ -238,7 +287,6 @@ export class TransactionService extends EntityService<Transaction> {
     }
 
     // TODO add more fuzzy searches
-
     const sorted = sort(matches, x => x.date, true);
     const categoryId = (sorted[0] && sorted[0].categoryId) || undefined;
     return categoryId;

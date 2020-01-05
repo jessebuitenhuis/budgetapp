@@ -14,6 +14,8 @@ import { TransactionsModule } from "./modules/transactions/transactions.module";
 import { MatchTransactionsComponent } from "./modules/transactions/match-transactions/match-transactions.component";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 import { PipesModule } from "./pipes/pipes.module";
+import { NetWorthModule } from "./modules/net-worth/net-worth.module";
+import { SpendingReportModule } from "./modules/spending-report/spending-report.module";
 
 registerLocaleData(localeNl, "nl");
 
@@ -29,7 +31,9 @@ registerLocaleData(localeNl, "nl");
     DashboardModule,
     TransactionsModule,
     NgbModalModule,
-    PipesModule
+    PipesModule,
+    NetWorthModule,
+    SpendingReportModule
   ],
   providers: [],
   bootstrap: [AppComponent],

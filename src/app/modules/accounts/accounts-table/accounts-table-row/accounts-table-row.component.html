@@ -15,3 +15,14 @@
     [ngModelOptions]="{ updateOn: 'blur' }"
   ></app-input-currency>
 </td>
+<td>
+  <select
+    class="custom-select"
+    name="type"
+    [ngModel]="account.type"
+    (ngModelChange)="update({ type: $event })"
+  >
+    <option [ngValue]="'asset'">Asset</option>
+    <option ngValue="liability">Liability</option>
+  </select>
+</td>
