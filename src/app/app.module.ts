@@ -9,9 +9,9 @@ import { ComponentsModule } from "./components/components.module";
 import { MomentModule } from "ngx-moment";
 import localeNl from "@angular/common/locales/nl";
 import { NavbarComponent } from "./navbar/navbar.component";
-import { DashboardModule } from "./dashboard/dashboard.module";
-import { TransactionsModule } from "./transactions/transactions.module";
-import { MatchTransactionsComponent } from "./transactions/match-transactions/match-transactions.component";
+import { DashboardModule } from "./modules/dashboard/dashboard.module";
+import { TransactionsModule } from "./modules/transactions/transactions.module";
+import { MatchTransactionsComponent } from "./modules/transactions/match-transactions/match-transactions.component";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 import { PipesModule } from "./pipes/pipes.module";
 

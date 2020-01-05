@@ -1,8 +1,7 @@
-import { Observable, BehaviorSubject, pipe, of } from "rxjs";
+import { BehaviorSubject, pipe } from "rxjs";
 import { map, take, shareReplay } from "rxjs/operators";
 import { BaseModel } from "../models/BaseModel";
 import { EntityDataService } from "./entity-data.service";
-import { createSelector } from "../entity/EntityHelpers";
 import { where } from "../helpers/pipes";
 import * as uuid from "uuid/v1";
 import { Viewmodel } from "../models/types";
@@ -35,7 +34,7 @@ export abstract class EntityService<T extends BaseModel> {
   entityMap$ = this._entities$.pipe(toEntitymap);
   entityKeys$ = this._entities$.pipe(toKeys);
 
-  selectById$ = (id: T["id"]) => createSelector(this.entityMap$, x => x[id]);
+  selectById$ = (id: T["id"]) => this.entityMap$.pipe(map(x => x[id]));
   selectByProp$ = (prop: Partial<T>) => this.entities$.pipe(where(prop));
 
   constructor(private _name: string) {

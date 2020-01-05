@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { TransactionsComponent } from "./transactions/transactions.component";
-import { AccountsComponent } from "./accounts/accounts.component";
+import { DashboardComponent } from "./modules/dashboard/dashboard.component";
+import { TransactionsComponent } from "./modules/transactions/transactions.component";
+import { AccountsComponent } from "./modules/accounts/accounts.component";
 
 const routes: Routes = [
   { path: "", component: DashboardComponent },

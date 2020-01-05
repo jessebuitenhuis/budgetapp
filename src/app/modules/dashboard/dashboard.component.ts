@@ -1,8 +1,8 @@
-import { CategoryService } from "../services/category.service";
+import { CategoryService } from "../../services/category.service";
 import { DashboardService } from "./services/dashboard.service";
 import { Component } from "@angular/core";
-import { AccountService } from "../services/account.service";
-import { Category } from "../models/Category";
+import { AccountService } from "../../services/account.service";
+import { Category } from "../../models/Category";
 
 @Component({
   selector: "app-dashboard",
