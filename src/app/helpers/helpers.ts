@@ -56,10 +56,10 @@ export function sort<T>(
   });
 }
 
-export function sortObject<T extends { [key: string]: any }>(obj: T): T {
+export function sortObject<T>(obj: Dictionary<T>): Dictionary<T> {
   return Object.keys(obj)
     .sort()
     .reduce((output, key) => {
       return { ...output, [key]: obj[key] };
-    }, {} as T);
+    }, {});
 }
