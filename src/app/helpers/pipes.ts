@@ -15,12 +15,17 @@ export type FilterObj<T> = { [P in keyof T]?: T[P] };
 
 export const sumDict = <T>(
   amountFn: (item: T) => number,
-  cumulative: boolean = false
+  cumulative: boolean = false,
+  digits = 2
 ) =>
-  pipe(map((dict: Dictionary<T[]>) => sumDictFn(dict, amountFn, cumulative)));
+  pipe(
+    map((dict: Dictionary<T[]>) =>
+      sumDictFn(dict, amountFn, cumulative, digits)
+    )
+  );
 
-export const sum = <T>(amountFn: (item: T) => number, start = 0) =>
-  pipe(map((list: T[]) => sumFn(list, amountFn, start)));
+export const sum = <T>(amountFn: (item: T) => number, start = 0, digits = 2) =>
+  pipe(map((list: T[]) => sumFn(list, amountFn, start, digits)));
 
 export const where = <T, U extends FilterObj<T>>(filter: FilterFn<T> | U) =>
   pipe(

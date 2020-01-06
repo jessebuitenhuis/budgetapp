@@ -3,24 +3,26 @@ import { Dictionary, mapObject } from "underscore";
 export function sum<T>(
   items: T[],
   amountFn: (item: T) => number,
-  start = 0
+  start = 0,
+  digits = 2
 ): number {
-  return items.reduce((total, item) => {
+  const _sum = items.reduce((total, item) => {
     return total + amountFn(item);
   }, start);
+  return parseFloat(_sum.toFixed(2));
 }
 
 export function sumDictFn<T>(
   dict: Dictionary<T[]>,
   amountFn: (item: T) => number,
-  cumulative: boolean = false
+  cumulative: boolean = false,
+  digits = 2
 ): { [key: string]: number } {
   let total = 0;
 
   return mapObject(dict, group => {
     const start = cumulative ? total : 0;
-    total = sum(group, amountFn, start);
-    console.log(start, total);
+    total = sum(group, amountFn, start, digits);
     return total;
   });
 }
