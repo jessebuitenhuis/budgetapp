@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { TransactionService } from "src/app/services/transaction.service";
 import { Observable, combineLatest } from "rxjs";
-import { ChartData, ChartDataSets } from "chart.js";
+import { ChartData, ChartDataSets, ChartOptions } from "chart.js";
 import { map } from "rxjs/operators";
 import { Dictionary, unique } from "underscore";
 
@@ -12,6 +12,12 @@ import { Dictionary, unique } from "underscore";
 })
 export class SpendingReportComponent {
   chartData$ = this._getChartData();
+
+  chartOptions: ChartOptions = {
+    tooltips: {
+      mode: "index"
+    }
+  };
 
   constructor(private _transactionService: TransactionService) {}
 
