@@ -3,7 +3,7 @@ import { Account, assetsFilter, liabilitiesFilter } from "../models/Account";
 import { EntityService } from "./entity.service";
 import { TransactionService } from "./transaction.service";
 import { map } from "rxjs/operators";
-import { sum } from "../helpers/pipes";
+import { sum, where } from "../helpers/pipes";
 
 @Injectable({
   providedIn: "root"
@@ -13,7 +13,13 @@ export class AccountService extends EntityService<Account> {
     super("account");
   }
 
-  assetAccounts$ = this.entities$.pipe(assetsFilter);
+  assetAccounts$ =
+    this.entities$.pipe(
+      assetsFilter
+    );
 
-  liabilityAccounts$ = this.entities$.pipe(liabilitiesFilter);
+  liabilityAccounts$ =
+    this.entities$.pipe(
+      liabilitiesFilter
+    );
 }

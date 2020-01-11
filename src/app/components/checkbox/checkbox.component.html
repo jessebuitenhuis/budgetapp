@@ -1,0 +1,9 @@
+<input
+  class="form-check-input"
+  type="checkbox"
+  [attr.id]="id"
+  [(ngModel)]="value"
+/>
+<label class="form-check-label" [attr.for]="id">
+  <ng-content></ng-content>
+</label>

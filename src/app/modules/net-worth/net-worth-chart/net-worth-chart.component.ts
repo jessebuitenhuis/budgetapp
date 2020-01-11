@@ -2,8 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { ChartOptions, ChartData, ChartDataSets } from "chart.js";
 import { TransactionService } from "src/app/services/transaction.service";
 import { Observable, combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 import { Dictionary, unique } from "underscore";
+import { NetWorthService } from "../services/net-worth.service";
 
 @Component({
   selector: "app-net-worth-chart",
@@ -19,14 +20,22 @@ export class NetWorthChartComponent {
     }
   };
 
-  constructor(private _transactionService: TransactionService) {}
+  constructor(
+    private _transactionService: TransactionService,
+    private _netWorthService: NetWorthService
+  ) {}
 
   private _getChartData(): Observable<ChartData> {
-    return combineLatest([
-      this._transactionService.assetsSaldoByMonth$(),
-      this._transactionService.liabilitiesSaldoByMonth$(),
-      this._transactionService.saldoByMonth$()
-    ]).pipe(map(x => this._mapToChartData(...x)));
+    return this._netWorthService.selectedAccounts$.pipe(
+      switchMap(accountIds =>
+        combineLatest([
+          this._transactionService.assetsSaldoByMonth$(accountIds),
+          this._transactionService.liabilitiesSaldoByMonth$(accountIds),
+          this._transactionService.saldoByMonth$(accountIds)
+        ])
+      ),
+      map(x => this._mapToChartData(...x))
+    );
   }
 
   private _mapToChartData(...dicts: Dictionary<number>[]): ChartData {

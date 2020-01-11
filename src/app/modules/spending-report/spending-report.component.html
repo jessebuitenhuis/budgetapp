@@ -1,9 +1,19 @@
-<canvas
-  *ngIf="chartData$ | async as chartData"
-  baseChart
-  [datasets]="chartData.datasets"
-  [labels]="chartData.labels"
-  [options]="chartOptions"
-  chartType="bar"
->
-</canvas>
+<div class="row">
+  <div class="col">
+    <canvas
+      *ngIf="chartData$ | async as chartData"
+      baseChart
+      [datasets]="chartData.datasets"
+      [labels]="chartData.labels"
+      [options]="chartOptions"
+      chartType="bar"
+    >
+    </canvas>
+  </div>
+  <app-select-accounts
+    class="col-3"
+    [accounts]="accounts$ | async"
+    [ngModel]="selectedAccounts$ | async"
+    (ngModelChange)="selectedAccounts$.next($event)"
+  ></app-select-accounts>
+</div>

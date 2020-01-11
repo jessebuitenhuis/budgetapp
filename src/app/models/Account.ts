@@ -20,3 +20,12 @@ export const assetsFilter = pipe(
 export const liabilitiesFilter = pipe(
   map((accounts: Account[]) => accounts.filter(x => x.type === "liability"))
 );
+
+export const accountsFilter = (accountIds: string[]) =>
+  pipe(
+    map((accounts: Account[]) =>
+      accountIds.length === 0
+        ? accounts
+        : accounts.filter(x => accountIds.includes(x.id))
+    )
+  );

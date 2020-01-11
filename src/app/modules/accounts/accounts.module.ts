@@ -9,8 +9,13 @@ import { AccountsTableRowComponent } from "./accounts-table/accounts-table-row/a
 import { ComponentsModule } from "../../components/components.module";
 import { AccountSummaryComponent } from "./account-summary/account-summary.component";
 import { RouterModule } from "@angular/router";
+import { SelectAccountsComponent } from './select-accounts/select-accounts.component';
 
-const components = [SelectAccountComponent, AccountSummaryComponent];
+const components = [
+  SelectAccountComponent,
+  SelectAccountsComponent,
+  AccountSummaryComponent
+];
 
 @NgModule({
   imports: [

@@ -1,0 +1,10 @@
+<input
+  class="form-check-input"
+  type="radio"
+  [name]="name"
+  [id]="id"
+  [value]="val"
+  [disabled]="isDisabled"
+  [(ngModel)]="value"
+/>
+<label class="form-check-label" [for]="id"> <ng-content></ng-content></label>

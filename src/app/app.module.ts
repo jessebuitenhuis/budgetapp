@@ -16,6 +16,7 @@ import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 import { PipesModule } from "./pipes/pipes.module";
 import { NetWorthModule } from "./modules/net-worth/net-worth.module";
 import { SpendingReportModule } from "./modules/spending-report/spending-report.module";
+import { AccountsModule } from "./modules/accounts/accounts.module";
 
 registerLocaleData(localeNl, "nl");
 
@@ -33,7 +34,8 @@ registerLocaleData(localeNl, "nl");
     NgbModalModule,
     PipesModule,
     NetWorthModule,
-    SpendingReportModule
+    SpendingReportModule,
+    AccountsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

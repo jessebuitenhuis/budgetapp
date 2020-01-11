@@ -1,14 +1,16 @@
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { Self, Optional, Input } from "@angular/core";
 
+let uniqueId = 0;
+
 export abstract class AbstractValueAccessor<T> implements ControlValueAccessor {
   @Input() readonly: boolean = false;
 
-  private _onChange?: (val: T | null) => any;
+  private _onChange?: (val: T | undefined) => any;
   private _onTouched?: () => any;
-  private _value: T | null = null;
+  protected _value?: T;
 
-  set value(val: T | null) {
+  set value(val: T | undefined) {
     const hasChanged = val !== this._value;
     this._value = val;
 
@@ -16,21 +18,22 @@ export abstract class AbstractValueAccessor<T> implements ControlValueAccessor {
       this._onChange(val);
     }
   }
-  get value(): T | null {
+  get value(): T | undefined {
     return this._value;
   }
 
   isDisabled = false;
+  id = uniqueId++;
 
   constructor(@Self() @Optional() public control: NgControl) {
     this._setValueAccessor();
   }
 
-  writeValue(val: T | null) {
+  writeValue(val: T | undefined) {
     this._value = val;
   }
 
-  registerOnChange(fn: (val: T | null) => any): void {
+  registerOnChange(fn: (val: T | undefined) => any): void {
     this._onChange = fn;
   }
 

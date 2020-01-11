@@ -1,1 +1,9 @@
-<app-net-worth-chart></app-net-worth-chart>
+<div class="row">
+  <app-net-worth-chart class="col"></app-net-worth-chart>
+  <app-select-accounts
+    [accounts]="accounts$ | async"
+    [ngModel]="selectedAccounts$ | async"
+    (ngModelChange)="selectedAccounts$.next($event)"
+    class="col-3"
+  ></app-select-accounts>
+</div>

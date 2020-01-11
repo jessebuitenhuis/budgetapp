@@ -1,0 +1,6 @@
+<app-checkbox
+  *ngFor="let account of accounts"
+  [ngModel]="states[account.id]"
+  (ngModelChange)="select(account.id, $event)"
+  >{{ account.name }}</app-checkbox
+>

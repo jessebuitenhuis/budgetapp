@@ -45,3 +45,10 @@ export const expensesFilter = pipe(
   includeInCalcFilter,
   map((t: Transaction[]) => t.filter(x => isExpense(x)))
 );
+
+export const filterTransactionByAccounts = (accountIds: string[] = []) =>
+  pipe(
+    map((t: Transaction[]) =>
+      t.filter(x => accountIds.length === 0 || accountIds.includes(x.accountId))
+    )
+  );

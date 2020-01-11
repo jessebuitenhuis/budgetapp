@@ -43,7 +43,7 @@ export class InputCurrencyComponent extends AbstractValueAccessor<number> {
     super(control);
   }
 
-  writeValue(val: number | null) {
+  writeValue(val: number | undefined) {
     super.writeValue(val);
     this.inputValue = val || 0;
   }

@@ -9,7 +9,15 @@ import {
 } from "../helpers/moment-pipes";
 import { sum, where, log, groupBy, sumDict } from "../helpers/pipes";
 import { EntityService } from "./entity.service";
-import { tap, map, take, share, shareReplay, switchMap } from "rxjs/operators";
+import {
+  tap,
+  map,
+  take,
+  share,
+  shareReplay,
+  switchMap,
+  filter
+} from "rxjs/operators";
 import { PayeeService } from "./payee.service";
 import { AccountService } from "./account.service";
 import { Category } from "../models/Category";
@@ -18,9 +26,10 @@ import {
   Transaction,
   incomeFilter,
   expensesFilter,
-  includeInCalcFilter
+  includeInCalcFilter,
+  filterTransactionByAccounts
 } from "../models/Transaction";
-import { assetsFilter } from "../models/Account";
+import { assetsFilter, accountsFilter } from "../models/Account";
 
 @Injectable({
   providedIn: "root"
@@ -84,94 +93,128 @@ export class TransactionService extends EntityService<Transaction> {
   getForAccount$ = (accountId: string) =>
     this.entities$.pipe(where({ accountId }), shareReplay(1));
 
-  getForAccounts$ = (accountIds: string[]) =>
+  getForAccounts$ = (accountIds: string[] = []) =>
     this.entities$.pipe(where(x => accountIds.includes(x.accountId)));
 
-  getForCategory$ = (categoryId?: string): Observable<Transaction[]> =>
-    this.entities$.pipe(where({ categoryId }), shareReplay(1));
+  getForCategory$ = (
+    categoryId?: string,
+    accountIds: string[] = []
+  ): Observable<Transaction[]> =>
+    this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
+      where({ categoryId }),
+      shareReplay(1)
+    );
 
-  getForPayee$ = (payeeId: string): Observable<Transaction[]> =>
-    this.entities$.pipe(where({ payeeId }), shareReplay(1));
+  getForPayee$ = (
+    payeeId: string,
+    accountIds: string[]
+  ): Observable<Transaction[]> =>
+    this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
+      where({ payeeId }),
+      shareReplay(1)
+    );
 
-  getForMonth$ = (month: Date) =>
-    this.entities$.pipe(isSameDate(x => x.date, month, "month"));
+  getForMonth$ = (month: Date, accountIds: string[] = []) =>
+    this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
+      isSameDate(x => x.date, month, "month")
+    );
 
   saldoForAccount$ = (accountId: string) =>
     this.selectByProp$({ accountId }).pipe(sum(x => x.amount));
 
-  assetsSaldoByMonth$ = () =>
+  assetsSaldoByMonth$ = (accountIds: string[] = []) =>
     this._accountService.assetAccounts$.pipe(
+      accountsFilter(accountIds),
       switchMap(accounts => this.getForAccounts$(accounts.map(x => x.id))),
       groupByMonth(x => x.date),
       sumDict(x => x.amount, true)
     );
 
-  liabilitiesSaldoByMonth$ = () =>
+  liabilitiesSaldoByMonth$ = (accountIds: string[] = []) =>
     this._accountService.liabilityAccounts$.pipe(
+      accountsFilter(accountIds),
       switchMap(accounts => this.getForAccounts$(accounts.map(x => x.id))),
       groupByMonth(x => x.date),
       sumDict(x => x.amount, true)
     );
 
-  saldoByMonth$ = () =>
+  saldoByMonth$ = (accountIds: string[] = []) =>
     this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
       groupByMonth(x => x.date),
       sumDict(x => x.amount, true)
     );
 
-  incomeForMonth$ = (month: Date) =>
+  incomeForMonth$ = (month: Date, accountIds: string[] = []) =>
     this.getForMonth$(month).pipe(
+      filterTransactionByAccounts(accountIds),
       incomeFilter,
       sum(x => x.amount)
     );
 
-  incomeByMonth$ = () =>
+  incomeByMonth$ = (accountIds: string[] = []) =>
     this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
       incomeFilter,
       groupByMonth(x => x.date),
       sumDict(x => x.amount)
     );
 
-  incomeForMonthByCategory$ = (month: Date) =>
+  incomeForMonthByCategory$ = (month: Date, accountIds: string[] = []) =>
     this.getForMonth$(month).pipe(
+      filterTransactionByAccounts(accountIds),
+
       incomeFilter,
       groupBy("categoryId"),
       sumDict(x => x.amount)
     );
 
-  expensesForMonth$ = (month: Date) =>
+  expensesForMonth$ = (month: Date, accountIds: string[] = []) =>
     this.getForMonth$(month).pipe(
+      filterTransactionByAccounts(accountIds),
       expensesFilter,
       sum(x => x.amount)
     );
 
-  expensesByMonth$ = () =>
+  expensesByMonth$ = (accountIds: string[] = []) =>
     this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
+
       expensesFilter,
       groupByMonth(x => x.date),
       sumDict(x => x.amount)
     );
 
-  expensesForMonthByCategory$ = (month: Date) =>
+  expensesForMonthByCategory$ = (month: Date, accountIds: string[] = []) =>
     this.getForMonth$(month).pipe(
+      filterTransactionByAccounts(accountIds),
       expensesFilter,
       groupBy("categoryId"),
       sumDict(x => x.amount)
     );
 
-  nettoForMonth$ = (month: Date) =>
+  nettoForMonth$ = (month: Date, accountIds: string[] = []) =>
     this.getForMonth$(month).pipe(
+      filterTransactionByAccounts(accountIds),
+
       includeInCalcFilter,
       sum(x => x.amount)
     );
 
-  nettoByMonth$ = () =>
+  nettoByMonth$ = (accountIds: string[] = []) =>
     this.entities$.pipe(
+      filterTransactionByAccounts(accountIds),
       includeInCalcFilter,
       groupByMonth(x => x.date),
       sumDict(x => x.amount)
     );
 
+  /**
+   * DEPRECATED
+   */
   getSpent$(filters: {
     categoryId?: string;
     month?: Date;

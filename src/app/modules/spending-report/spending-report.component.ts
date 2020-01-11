@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { TransactionService } from "src/app/services/transaction.service";
-import { Observable, combineLatest } from "rxjs";
+import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { ChartData, ChartDataSets, ChartOptions } from "chart.js";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 import { Dictionary, unique } from "underscore";
+import { AccountService } from "src/app/services/account.service";
 
 @Component({
   selector: "app-spending-report",
@@ -11,6 +12,7 @@ import { Dictionary, unique } from "underscore";
   styleUrls: ["./spending-report.component.css"]
 })
 export class SpendingReportComponent {
+  selectedAccounts$ = new BehaviorSubject<string[]>([]);
   chartData$ = this._getChartData();
 
   chartOptions: ChartOptions = {
@@ -19,14 +21,24 @@ export class SpendingReportComponent {
     }
   };
 
-  constructor(private _transactionService: TransactionService) {}
+  accounts$ = this._accountService.entities$;
+
+  constructor(
+    private _transactionService: TransactionService,
+    private _accountService: AccountService
+  ) {}
 
   private _getChartData(): Observable<ChartData> {
-    return combineLatest([
-      this._transactionService.incomeByMonth$(),
-      this._transactionService.expensesByMonth$(),
-      this._transactionService.nettoByMonth$()
-    ]).pipe(map(x => this._mapToChartData(...x)));
+    return this.selectedAccounts$.pipe(
+      switchMap(accountIds =>
+        combineLatest([
+          this._transactionService.incomeByMonth$(accountIds),
+          this._transactionService.expensesByMonth$(accountIds),
+          this._transactionService.nettoByMonth$(accountIds)
+        ])
+      ),
+      map(x => this._mapToChartData(...x))
+    );
   }
 
   private _mapToChartData(
