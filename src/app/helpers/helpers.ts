@@ -39,7 +39,7 @@ export function paginate<T>(
 
 export type SortFn<T> = (item: T) => any;
 
-export type SearchFn<T> = (item: T) => boolean;
+export type SearchFn<T> = (item: T, searchTerm: string) => boolean;
 
 export function sort<T>(
   list: T[],

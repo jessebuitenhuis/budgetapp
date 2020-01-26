@@ -1,0 +1,5 @@
+<h1>Table header</h1>
+<app-input-search
+  [ngModel]="searchTerm$ | async"
+  (ngModelChange)="searchTerm$.next($event)"
+></app-input-search>
