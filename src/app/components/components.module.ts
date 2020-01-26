@@ -20,7 +20,7 @@ const components = [
   RadioComponent
 ];
 
-const modules = [FormsModule, CardModule, TableModule];
+const modules = [FormsModule, CardModule, TableModule, FormsModule];
 
 @NgModule({
   imports: [CommonModule, MomentModule, ...modules],

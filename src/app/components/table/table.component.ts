@@ -1,7 +1,7 @@
 import { Component, ContentChild, Input } from "@angular/core";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
-import { paginate, SortFn, sort } from "src/app/helpers/helpers";
+import { paginate, SortFn, sort, SearchFn } from "src/app/helpers/helpers";
 import { TableRowDirective } from "./table-row.directive";
 
 @Component({
@@ -12,6 +12,7 @@ import { TableRowDirective } from "./table-row.directive";
 export class TableComponent<T> {
   data$ = new BehaviorSubject<T[]>([]);
   page$ = new BehaviorSubject(0);
+
   tableData$ = combineLatest([this.data$, this.page$]).pipe(
     map(([data, page]) => {
       const sorted = this.sortFn
@@ -26,6 +27,7 @@ export class TableComponent<T> {
   }
   @Input() pageSize: number = 10;
   @Input() sortFn?: SortFn<T>;
+  @Input() searchFn?: SearchFn<T>;
   @Input() sortDesc = false;
 
   @ContentChild(TableRowDirective)

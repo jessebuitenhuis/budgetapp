@@ -39,6 +39,8 @@ export function paginate<T>(
 
 export type SortFn<T> = (item: T) => any;
 
+export type SearchFn<T> = (item: T) => boolean;
+
 export function sort<T>(
   list: T[],
   sortFn: SortFn<T>,

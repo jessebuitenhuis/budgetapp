@@ -8,49 +8,8 @@
   }
 }
 
-.input-group {
-  & > .form-control,
-  & > .form-control-plaintext {
-    &:not(:first-child):not(:read-only) {
-      &,
-      &:hover,
-      &:focus {
-        border-radius: $input-border-radius;
-      }
-    }
-  }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-
-.input-group-prepend,
-.input-group-append {
-  width: 1.5rem;
-  padding: $input-padding-y 0;
-  position: absolute;
-  z-index: 4;
-  top: 1px;
-  pointer-events: none;
-}
-
-.input-group-prepend {
-  left: 0;
-  padding-left: 0.5rem;
-  & ~ .form-control,
-  & ~ .form-control-plaintext {
-    padding-left: 1rem + $input-padding-x;
-  }
-}
-
-.input-group-append {
-  right: 0;
-  padding-right: 0.5rem;
-  & ~ .form-control,
-  & ~ .form-control-plaintext {
-    padding-right: 1rem + $input-padding-x;
-  }
-}
-
-// input::-webkit-outer-spin-button,
-// input::-webkit-inner-spin-button {
-//   -webkit-appearance: none;
-//   margin: 0;
-// }
