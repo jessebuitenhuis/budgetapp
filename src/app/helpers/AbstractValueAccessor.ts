@@ -30,7 +30,7 @@ export abstract class AbstractValueAccessor<T> implements ControlValueAccessor {
     this._setValueAccessor();
   }
 
-  writeValue(val: T | undefined) {
+  writeValue(val: T | undefined): void {
     this._value = val;
   }
 

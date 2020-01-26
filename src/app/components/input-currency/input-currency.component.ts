@@ -16,7 +16,7 @@ import { CurrencyPipe } from "@angular/common";
   styleUrls: ["./input-currency.component.scss"]
 })
 export class InputCurrencyComponent extends AbstractValueAccessor<number> {
-  @ViewChild("inputEl", { static: true }) inputEl!: ElementRef<
+  @ViewChild("inputEl", { static: false }) inputEl?: ElementRef<
     HTMLInputElement
   >;
 
@@ -28,13 +28,13 @@ export class InputCurrencyComponent extends AbstractValueAccessor<number> {
       maximumFractionDigits: 2
     });
 
-    if (this.inputEl.nativeElement.value !== string) {
+    if (this.inputEl && this.inputEl.nativeElement.value !== string) {
       this.inputEl.nativeElement.value = string;
     }
   }
 
   get inputValue(): number {
-    const val = this.inputEl.nativeElement.value || "0";
+    const val = (this.inputEl && this.inputEl.nativeElement.value) || "0";
     const string = val.replace(/\./g, "").replace(/\,/g, ".");
     return parseFloat(string);
   }
@@ -43,12 +43,12 @@ export class InputCurrencyComponent extends AbstractValueAccessor<number> {
     super(control);
   }
 
-  writeValue(val: number | undefined) {
+  writeValue(val: number | undefined): void {
     super.writeValue(val);
     this.inputValue = val || 0;
   }
 
-  onChange(event: any) {
+  onChange(event: any): void {
     const val: string = event.target.value;
     const string = val.replace(/\./g, "").replace(/\,/g, ".") || "0";
     const float = parseFloat(string);
@@ -61,20 +61,26 @@ export class InputCurrencyComponent extends AbstractValueAccessor<number> {
       formattedString += digitPart[0].slice(0, 3);
     }
 
-    this.inputEl.nativeElement.value = formattedString;
+    if (this.inputEl) {
+      this.inputEl.nativeElement.value = formattedString;
+    }
   }
 
-  onBlur() {
+  onBlur(): void {
     this.value = this.inputValue;
     this.inputValue = this.inputValue;
     super.onTouched();
   }
 
   onFocus(): void {
-    this.inputEl.nativeElement.select();
+    if (this.inputEl) {
+      this.inputEl.nativeElement.select();
+    }
   }
 
   onEnter(): void {
-    this.inputEl.nativeElement.blur();
+    if (this.inputEl) {
+      this.inputEl.nativeElement.blur();
+    }
   }
 }
