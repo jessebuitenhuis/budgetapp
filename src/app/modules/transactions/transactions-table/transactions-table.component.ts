@@ -36,6 +36,10 @@ export class TransactionsTableComponent {
     private ngbModal: NgbModal
   ) {}
 
+  onUpload(content: string): void {
+    this._transactionService.uploadCsv(content);
+  }
+
   update(transaction: Transaction, props: Partial<Transaction>): void {
     this._transactionService.update({
       ...transaction,

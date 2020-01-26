@@ -1,6 +1,13 @@
 import { pipe } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { sum as sumFn, sumDictFn } from "./helpers";
+import {
+  sum as sumFn,
+  sumDictFn,
+  SearchFn,
+  SortFn,
+  sort,
+  paginate
+} from "./helpers";
 import {
   where as _where,
   groupBy as _groupBy,
@@ -36,6 +43,27 @@ export const where = <T, U extends FilterObj<T>>(filter: FilterFn<T> | U) =>
         return _where(list, filter);
       }
     })
+  );
+
+export const filterPipe = <T>(searchFn: SearchFn<T>) =>
+  pipe(
+    map(([data, searchTerm]: [T[], string]) =>
+      searchTerm ? data.filter(x => searchFn(x, searchTerm)) : data
+    )
+  );
+
+export const sortPipe = <T>(sortFn?: SortFn<T>) =>
+  pipe(
+    map(([data, desc]: [T[], boolean]) =>
+      sortFn ? sort(data, sortFn, desc) : data
+    )
+  );
+
+export const paginatePipe = <T>() =>
+  pipe(
+    map(([data, page, pageSize]: [T[], number, number]) =>
+      paginate(data, page, pageSize)
+    )
   );
 
 export const find = <T>(filter: FilterFn<T>) =>

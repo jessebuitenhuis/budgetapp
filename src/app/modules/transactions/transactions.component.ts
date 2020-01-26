@@ -7,10 +7,4 @@ import { ActivatedRoute } from "@angular/router";
   templateUrl: "./transactions.component.html",
   styleUrls: ["./transactions.component.css"]
 })
-export class TransactionsComponent {
-  constructor(private _transactionService: TransactionService) {}
-
-  onUpload(content: string): void {
-    this._transactionService.uploadCsv(content);
-  }
-}
+export class TransactionsComponent {}

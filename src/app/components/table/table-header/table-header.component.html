@@ -1,5 +1,8 @@
-<h1>Table header</h1>
+<h1>{{ title }}</h1>
 <app-input-search
+  class="ml-auto mr-2"
+  *ngIf="showSearch"
   [ngModel]="searchTerm$ | async"
   (ngModelChange)="searchTerm$.next($event)"
 ></app-input-search>
+<ng-content></ng-content>

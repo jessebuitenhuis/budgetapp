@@ -10,6 +10,8 @@ import { BehaviorSubject } from "rxjs";
 export class TableHeaderComponent<T> implements OnDestroy, OnInit {
   private _alive = true;
   searchTerm$ = this.table.searchTerm$;
+  showSearch = this.table.showSearch;
+  title = this.table.title;
 
   constructor(private table: TableComponent<T>) {}
 

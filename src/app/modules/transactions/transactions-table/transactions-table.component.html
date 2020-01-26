@@ -1,4 +1,4 @@
-<div class="form-check">
+<!-- <div class="form-check">
   <input
     class="form-check-input"
     type="checkbox"
@@ -9,14 +9,21 @@
   <label class="form-check-label" for="onlyShowUncategorized">
     Only show uncategorized
   </label>
-</div>
+</div> -->
 
 <app-table
   [data]="transactions$ | async"
   [sortFn]="sortFn"
   [sortDesc]="true"
   pageSize="25"
+  title="Transactions"
 >
+  <app-file-upload
+    appTableButton
+    (uploaded)="onUpload($event)"
+    text="Upload CSV"
+    accept=".csv"
+  ></app-file-upload>
   <thead>
     <tr>
       <th>Datee</th>

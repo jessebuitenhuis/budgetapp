@@ -1,9 +1,11 @@
-<app-table-header></app-table-header>
+<app-table-header>
+  <ng-content select="[appTableButton]"></ng-content>
+</app-table-header>
 <table class="table">
   <ng-content select="thead"></ng-content>
   <tbody>
-    <ng-content></ng-content>
-    <ng-container *ngFor="let row of tableData$ | async">
+    <ng-content select="tr"></ng-content>
+    <ng-container *ngFor="let row of paginatedData$ | async">
       <ng-container
         *ngTemplateOutlet="rowTpl?.templateRef; context: { $implicit: row }"
       ></ng-container>
@@ -13,11 +15,11 @@
 </table>
 
 <ngb-pagination
-  [hidden]="(data$ | async).length <= pageSize"
+  [hidden]="(filteredData$ | async).length <= (pageSize$ | async)"
   [page]="page$ | async"
   (pageChange)="page$.next($event)"
-  [pageSize]="pageSize"
+  [pageSize]="pageSize$ | async"
   [maxSize]="10"
   [boundaryLinks]="true"
-  [collectionSize]="(data$ | async).length"
+  [collectionSize]="(filteredData$ | async).length"
 ></ngb-pagination>
