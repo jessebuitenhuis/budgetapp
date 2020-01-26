@@ -1,4 +1,4 @@
-import { Input, Output, EventEmitter } from "@angular/core";
+import { Input, Output, EventEmitter, Directive } from "@angular/core";
 import { Label } from "ng2-charts";
 import {
   ChartDataSets,
@@ -14,6 +14,7 @@ export interface TooltipLabel {
   value?: number | string;
 }
 
+@Directive()
 export abstract class AbstractChartComponent {
   private _defaultOptions: ChartOptions = {
     tooltips: {

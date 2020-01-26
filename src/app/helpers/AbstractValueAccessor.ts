@@ -1,8 +1,9 @@
 import { ControlValueAccessor, NgControl } from "@angular/forms";
-import { Self, Optional, Input } from "@angular/core";
+import { Self, Optional, Input, Directive } from "@angular/core";
 
 let uniqueId = 0;
 
+@Directive()
 export abstract class AbstractValueAccessor<T> implements ControlValueAccessor {
   @Input() readonly: boolean = false;
 

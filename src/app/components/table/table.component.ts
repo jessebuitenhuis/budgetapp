@@ -28,7 +28,7 @@ export class TableComponent<T> {
   @Input() sortFn?: SortFn<T>;
   @Input() sortDesc = false;
 
-  @ContentChild(TableRowDirective, { static: false })
+  @ContentChild(TableRowDirective)
   rowTpl?: TableRowDirective;
 
   constructor() {}
