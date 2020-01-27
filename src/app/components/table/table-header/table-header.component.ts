@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy, Input } from "@angular/core";
 import { TableComponent } from "../table.component";
 import { BehaviorSubject } from "rxjs";
-import { BaseModel } from "src/app/models/BaseModel";
 
 @Component({
   selector: "app-table-header",
   templateUrl: "./table-header.component.html",
   styleUrls: ["./table-header.component.css"]
 })
-export class TableHeaderComponent<T extends BaseModel>
+export class TableHeaderComponent<T extends { id: string }>
   implements OnDestroy, OnInit {
   private _alive = true;
   searchTerm$ = this.table.searchTerm$;

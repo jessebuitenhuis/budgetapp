@@ -28,17 +28,17 @@ import {
   CdkTable
 } from "@angular/cdk/table";
 import { mapObject, Dictionary } from "underscore";
-import { BaseModel } from "src/app/models/BaseModel";
+import { TableCellDirective } from "./table-cell/table-cell.component";
 
 @Component({
   selector: "app-table",
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.css"]
 })
-export class TableComponent<T extends BaseModel> implements AfterContentInit {
+export class TableComponent<T extends { id: string }>
+  implements AfterContentInit {
   displayedColumns: string[] = [];
   @ViewChild(CdkTable, { static: true }) table!: CdkTable<T>;
-  @ContentChildren(CdkColumnDef) columns!: QueryList<CdkColumnDef>;
 
   // above cdk
 
@@ -50,7 +50,11 @@ export class TableComponent<T extends BaseModel> implements AfterContentInit {
   @Input() sortFn?: SortFn<T>;
 
   // TODO: make options input?
-  @Input() showSelect = false;
+  @Input() set showSelect(val: boolean) {
+    if (val) {
+      this.displayedColumns.push("select");
+    }
+  }
   @Input() showSearch = true;
 
   @Input() title: string = "";
@@ -93,18 +97,6 @@ export class TableComponent<T extends BaseModel> implements AfterContentInit {
   rowTpl?: TableRowDirective;
 
   constructor() {}
-
-  ngAfterContentInit(): void {
-    this.columns.changes
-      .pipe(startWith(this.columns.toArray()))
-      .subscribe((columnDefs: CdkColumnDef[]) => {
-        columnDefs.forEach(def => this.table.addColumnDef(def));
-        const displayedColumns = this.showSelect ? ["select"] : [];
-        this.displayedColumns = displayedColumns.concat(
-          columnDefs.map(x => x.name)
-        );
-      });
-  }
 
   private _getDefaultSearchFn(): SearchFn<T> {
     return (item: T, searchTerm: string) => {

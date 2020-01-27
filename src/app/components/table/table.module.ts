@@ -9,8 +9,16 @@ import { FormsModule } from "../forms/forms.module";
 import { TableButtonDirective } from "./table-button.directive";
 import { CdkTableModule } from "@angular/cdk/table";
 import { InputsModule } from "../inputs/inputs.module";
+import { TableSortDirective } from "./table-sort.directive";
+import { TableCellDirective } from "./table-cell/table-cell.component";
 
-const components = [TableComponent, TableRowDirective, TableHeaderComponent];
+const components = [
+  TableComponent,
+  TableRowDirective,
+  TableHeaderComponent,
+  TableSortDirective,
+  TableCellDirective
+];
 
 @NgModule({
   imports: [
@@ -21,7 +29,7 @@ const components = [TableComponent, TableRowDirective, TableHeaderComponent];
     FormsModule,
     InputsModule
   ],
-  declarations: [...components, TableButtonDirective],
+  declarations: [...components, TableButtonDirective, TableSortDirective],
   exports: [...components, CdkTableModule]
 })
 export class TableModule {}

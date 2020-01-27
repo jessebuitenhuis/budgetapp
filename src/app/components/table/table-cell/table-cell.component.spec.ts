@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TransactionsTableRowComponent } from './transactions-table-row.component';
+import { TableCellComponent } from './table-cell.component';
 
-describe('TransactionsTableRowComponent', () => {
-  let component: TransactionsTableRowComponent;
-  let fixture: ComponentFixture<TransactionsTableRowComponent>;
+describe('TableCellComponent', () => {
+  let component: TableCellComponent;
+  let fixture: ComponentFixture<TableCellComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionsTableRowComponent ]
+      declarations: [ TableCellComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionsTableRowComponent);
+    fixture = TestBed.createComponent(TableCellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
