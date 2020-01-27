@@ -1,17 +1,20 @@
-<app-table-header>
+<app-table-header [title]="title">
   <ng-content select="[appTableButton]"></ng-content>
 </app-table-header>
-<table class="table">
-  <ng-content select="thead"></ng-content>
-  <tbody>
-    <ng-content select="tr"></ng-content>
-    <ng-container *ngFor="let row of paginatedData$ | async">
-      <ng-container
-        *ngTemplateOutlet="rowTpl?.templateRef; context: { $implicit: row }"
-      ></ng-container>
-    </ng-container>
-  </tbody>
-  <ng-content select="tfoot"></ng-content>
+
+<table class="table" cdk-table [dataSource]="paginatedData$">
+  <ng-container cdkColumnDef="select">
+    <th class="td-shrink" cdk-header-cell *cdkHeaderCellDef>
+      <app-checkbox [(ngModel)]="allSelected"></app-checkbox>
+    </th>
+    <td cdk-cell *cdkCellDef="let item">
+      <app-checkbox [(ngModel)]="selected[item.id]"></app-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-content></ng-content>
+  <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
+  <tr cdk-row *cdkRowDef="let row; columns: displayedColumns"></tr>
 </table>
 
 <ngb-pagination

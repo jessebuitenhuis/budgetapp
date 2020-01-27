@@ -54,8 +54,14 @@ export class TransactionsTableComponent {
     }
   }
 
-  add(): void {
-    this._transactionService.add(this.newTransaction);
+  add(transaction: Transaction): void {
+    this._transactionService.add(transaction);
     this.newTransaction = this._transactionService.createEntity();
+  }
+
+  remove(transaction: Transaction): void {
+    if (confirm("Are you sure?")) {
+      this._transactionService.delete(transaction);
+    }
   }
 }

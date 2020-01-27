@@ -18,13 +18,13 @@
   pageSize="25"
   title="Transactions"
 >
-  <app-file-upload
+  <!-- <app-file-upload
     appTableButton
     (uploaded)="onUpload($event)"
     text="Upload CSV"
     accept=".csv"
-  ></app-file-upload>
-  <thead>
+  ></app-file-upload> -->
+  <!-- <thead>
     <tr>
       <th>Datee</th>
       <th>Account</th>
@@ -34,12 +34,97 @@
       <th>Amount</th>
       <th></th>
     </tr>
-  </thead>
-  <tr class="table-light" app-transactions-table-row [showSaveBtn]="true"></tr>
+  </thead> -->
+
+  <ng-container cdkColumnDef="date">
+    <cdk-header-cell *cdkHeaderCellDef>Date</cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction" class="text-nowrap">
+      <app-input-date [(ngModel)]="transaction.date"></app-input-date>
+    </cdk-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="accountId">
+    <cdk-header-cell *cdkHeaderCellDef>Account</cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction" class="py-0">
+      <app-select-account
+        [(ngModel)]="transaction.accountId"
+        (ngModelChange)="update(transaction, { accountId: $event })"
+      ></app-select-account>
+    </cdk-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="payeeId">
+    <cdk-header-cell *cdkHeaderCellDef>Payee</cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction">
+      <app-select-payee
+        [(ngModel)]="transaction.payeeId"
+        (ngModelChange)="update(transaction, { payeeId: $event })"
+      ></app-select-payee>
+    </cdk-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="categoryId">
+    <cdk-header-cell *cdkHeaderCellDef>Category</cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction">
+      <app-select-category
+        [(ngModel)]="transaction.categoryId"
+        (ngModelChange)="update(transaction, { categoryId: $event })"
+      ></app-select-category>
+    </cdk-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="description">
+    <cdk-header-cell *cdkHeaderCellDef>Description</cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction">
+      <input
+        type="text"
+        class="form-control-plaintext"
+        [(ngModel)]="transaction.description"
+        (ngModelChange)="update(transaction, { description: $event })"
+        [ngModelOptions]="{ updateOn: 'blur' }"
+        placeholder="Description..."
+      />
+    </cdk-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="amount">
+    <cdk-header-cell *cdkHeaderCellDef>Amount</cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction">
+      <app-input-currency
+        [(ngModel)]="transaction.amount"
+        (ngModelChange)="update(transaction, { amount: $event })"
+      ></app-input-currency>
+    </cdk-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="actions">
+    <cdk-header-cell *cdkHeaderCellDef></cdk-header-cell>
+    <cdk-cell *cdkCellDef="let transaction">
+      <button
+        *ngIf="showSaveBtn"
+        type="button"
+        class="btn btn-primary"
+        (click)="add(transaction)"
+      >
+        Add
+      </button>
+
+      <button
+        *ngIf="!showSaveBtn"
+        type="button"
+        class="btn btn-danger"
+        (click)="remove(transaction)"
+      >
+        Remove
+      </button>
+    </cdk-cell>
+  </ng-container>
+
+  <!-- <tr class="table-light" app-transactions-table-row [showSaveBtn]="true"></tr>
   <tr
     *tableRow="let transaction"
     app-transactions-table-row
     [transaction]="transaction"
     (update)="update(transaction, $event)"
-  ></tr>
+  ></tr> -->
 </app-table>

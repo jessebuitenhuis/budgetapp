@@ -9,9 +9,11 @@ import { AccountsModule } from "../accounts/accounts.module";
 import { PayeesModule } from "../payees/payees.module";
 import { CategoriesModule } from "../categories/categories.module";
 import { MatchTransactionsComponent } from "./match-transactions/match-transactions.component";
+import { CdkTableModule } from "@angular/cdk/table";
 
 @NgModule({
   imports: [
+    CdkTableModule,
     CommonModule,
     ComponentsModule,
     FormsModule,

@@ -1,16 +1,15 @@
-import { SelectAccountsComponent } from "./select-accounts.component";
-import { moduleMetadata } from "@storybook/angular";
-import { CheckboxComponent } from "src/app/components/checkbox/checkbox.component";
-import { Account } from "src/app/models/Account";
-import { action } from "@storybook/addon-actions";
 import { FormsModule } from "@angular/forms";
+import { action } from "@storybook/addon-actions";
+import { moduleMetadata } from "@storybook/angular";
+import { SelectAccountsComponent } from "./select-accounts.component";
+import { InputsModule } from "src/app/components/inputs/inputs.module";
 
 export default {
   title: "SelectAccounts",
   decorators: [
     moduleMetadata({
-      imports: [FormsModule],
-      declarations: [SelectAccountsComponent, CheckboxComponent]
+      imports: [FormsModule, InputsModule],
+      declarations: [SelectAccountsComponent]
     })
   ]
 };

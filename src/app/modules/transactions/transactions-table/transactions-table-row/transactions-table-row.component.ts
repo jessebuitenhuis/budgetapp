@@ -20,15 +20,4 @@ export class TransactionsTableRowComponent {
   @Output() save = new EventEmitter<void>();
 
   constructor(private _transactionService: TransactionService) {}
-
-  remove(): void {
-    if (confirm("Are you sure?")) {
-      this._transactionService.delete(this.transaction);
-    }
-  }
-
-  add(): void {
-    this._transactionService.add(this._transaction);
-    this._transaction = this._transactionService.createEntity();
-  }
 }

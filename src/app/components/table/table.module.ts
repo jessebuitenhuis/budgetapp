@@ -6,23 +6,22 @@ import { TableRowDirective } from "./table-row.directive";
 import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
 import { TableHeaderComponent } from "./table-header/table-header.component";
 import { FormsModule } from "../forms/forms.module";
-import { TableButtonDirective } from './table-button.directive';
+import { TableButtonDirective } from "./table-button.directive";
+import { CdkTableModule } from "@angular/cdk/table";
+import { InputsModule } from "../inputs/inputs.module";
 
 const components = [TableComponent, TableRowDirective, TableHeaderComponent];
 
 @NgModule({
-   imports: [
-      NgFormsModule,
-      CommonModule,
-      NgbPaginationModule,
-      FormsModule
-   ],
-   declarations: [
-      ...components,
-      TableButtonDirective
-   ],
-   exports: [
-      ...components
-   ]
+  imports: [
+    CommonModule,
+    CdkTableModule,
+    NgFormsModule,
+    NgbPaginationModule,
+    FormsModule,
+    InputsModule
+  ],
+  declarations: [...components, TableButtonDirective],
+  exports: [...components, CdkTableModule]
 })
 export class TableModule {}

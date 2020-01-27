@@ -39,7 +39,9 @@ export function ObservableInput<T>(value?: T): PropertyDecorator {
       if (subscription) {
         subscription.unsubscribe();
       }
-      currentOnDestroyFn();
+      if (currentOnDestroyFn) {
+        currentOnDestroyFn();
+      }
     };
   };
 }
