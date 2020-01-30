@@ -27,8 +27,8 @@ jobs:
       - name: Create Artifact
         uses: actions/upload-artifact@master
         with:
-          name: public
-          path: dist/Budget
+          name: dist
+          path: dist
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: public
+          name: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
