@@ -7,7 +7,9 @@ import {
   Input,
   OnDestroy,
   QueryList,
-  ViewChild
+  ViewChild,
+  Output,
+  EventEmitter
 } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { shareReplay, take, throttleTime, tap } from "rxjs/operators";
@@ -32,14 +34,10 @@ export class TableComponent<T extends { id: string }> {
   @ViewChild(CdkTable, { static: true }) table!: CdkTable<T>;
   @ContentChildren(CdkColumnDef) columnDefs!: QueryList<CdkColumnDef>;
 
-  // above cdk
-
   @ObservableInput() @Input("data") data$!: Observable<T[]>;
   @ObservableInput(10) @Input("pageSize") pageSize$!: Observable<number>;
 
   @Input() searchFn: SearchFn<T> = this._getDefaultSearchFn();
-  sortFn$ = new BehaviorSubject<SortFn<T> | null>(null);
-  sortDirection$ = new BehaviorSubject<SortDirection>(SortDirection.DESCENDING);
 
   @Input() set showSelect(val: boolean) {
     if (val) {
@@ -49,9 +47,17 @@ export class TableComponent<T extends { id: string }> {
     }
   }
   @Input() showSearch = true;
-
   @Input() title: string = "";
 
+  @Input() set selectedIds(val: string[]) {
+    const selected: Dictionary<boolean> = {};
+    val.forEach(id => (selected[id] = true));
+    this.selected = selected;
+  }
+  @Output() selectedIdsChange = new EventEmitter<string[]>();
+
+  sortFn$ = new BehaviorSubject<SortFn<T> | null>(null);
+  sortDirection$ = new BehaviorSubject<SortDirection>(SortDirection.DESCENDING);
   page$ = new BehaviorSubject(0);
 
   searchTerm$ = new BehaviorSubject<string>("");
@@ -86,7 +92,27 @@ export class TableComponent<T extends { id: string }> {
     this._allSelected = true;
   }
 
-  selected: Dictionary<boolean> = {};
+  private _selected: Dictionary<boolean> = {};
+  get selected(): Dictionary<boolean> {
+    return this._selected;
+  }
+  set selected(val: Dictionary<boolean>) {
+    this._selected = val;
+    this.selectedIdsChange.emit(this.getSelectedIds(val));
+  }
+
+  getSelectedIds(val: Dictionary<boolean>): string[] {
+    return Object.entries(val)
+      .filter(([id, selected]) => selected)
+      .map(([id, selected]) => id);
+  }
+
+  select(id: string, selected: boolean): void {
+    this.selected = {
+      ...this.selected,
+      [id]: selected
+    };
+  }
 
   @ContentChild(TableRowDirective)
   rowTpl?: TableRowDirective;

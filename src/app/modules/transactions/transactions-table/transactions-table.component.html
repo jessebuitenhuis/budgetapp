@@ -11,7 +11,13 @@
   </label>
 </div> -->
 
-<app-table [data]="transactions$ | async" pageSize="25" title="Transactions">
+<app-table
+  [data]="transactions$ | async"
+  pageSize="25"
+  title="Transactions"
+  [showSelect]="true"
+  [(selectedIds)]="selected"
+>
   <app-table-cell name="date" [sortDefault]="true">
     <ng-container *appTableHeaderCellDef>Header cell!</ng-container>
     <app-input-date

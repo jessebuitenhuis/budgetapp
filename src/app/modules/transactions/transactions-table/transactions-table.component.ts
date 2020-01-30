@@ -8,6 +8,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MatchTransactionsComponent } from "../match-transactions/match-transactions.component";
 import { ActivatedRoute } from "@angular/router";
 import { PayeeService } from "src/app/services/payee.service";
+import { Dictionary } from "underscore";
 
 @Component({
   selector: "app-transactions-table",
@@ -15,6 +16,8 @@ import { PayeeService } from "src/app/services/payee.service";
   styleUrls: ["./transactions-table.component.css"]
 })
 export class TransactionsTableComponent {
+  selected: string[] = [];
+
   onlyShowUncategorized$ = new BehaviorSubject(false);
   accountId$ = this._activatedRoute.paramMap.pipe(
     map(x => x.get("id") || null)

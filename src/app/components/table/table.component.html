@@ -8,7 +8,10 @@
       <app-checkbox [(ngModel)]="allSelected"></app-checkbox>
     </th>
     <td cdk-cell *cdkCellDef="let item">
-      <app-checkbox [(ngModel)]="selected[item.id]"></app-checkbox>
+      <app-checkbox
+        [ngModel]="selected[item.id]"
+        (ngModelChange)="select(item.id, $event)"
+      ></app-checkbox>
     </td>
   </ng-container>
 
