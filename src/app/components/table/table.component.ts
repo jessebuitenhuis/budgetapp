@@ -23,6 +23,7 @@ import { filterPipe, paginatePipe, sortPipe } from "src/app/helpers/pipes";
 import { ObservableInput } from "src/app/_decorators/ObservableInput";
 import { Dictionary } from "underscore";
 import { TableRowDirective } from "./table-row.directive";
+import { Transaction } from "src/app/models/Transaction";
 
 @Component({
   selector: "app-table",

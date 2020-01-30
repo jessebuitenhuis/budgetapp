@@ -9,6 +9,7 @@ import { MatchTransactionsComponent } from "../match-transactions/match-transact
 import { ActivatedRoute } from "@angular/router";
 import { PayeeService } from "src/app/services/payee.service";
 import { Dictionary } from "underscore";
+import { CategoryService } from "src/app/services/category.service";
 
 @Component({
   selector: "app-transactions-table",
@@ -31,8 +32,14 @@ export class TransactionsTableComponent {
     })
   );
 
-  sortByPayeeFn: SortFnAsync<Transaction> = item =>
-    this._payeeService.selectById$(item.payeeId).pipe(map(x => x && x.name));
+  sortByPayeeFn = this._payeeService.sortByProperty$<Transaction>(
+    "name",
+    x => x.payeeId
+  );
+  sortByCategoryFn = this._categoryService.sortByProperty$<Transaction>(
+    "name",
+    x => x.categoryId
+  );
 
   newTransaction: Transaction = this._transactionService.createEntity();
   sortFn: SortFnSync<Transaction> = item => item.date;
@@ -40,6 +47,7 @@ export class TransactionsTableComponent {
   constructor(
     private _transactionService: TransactionService,
     private _payeeService: PayeeService,
+    private _categoryService: CategoryService,
     private _activatedRoute: ActivatedRoute,
     private ngbModal: NgbModal
   ) {}

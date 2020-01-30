@@ -39,7 +39,7 @@ export abstract class EntityService<T extends BaseModel> {
   selectById$ = (id: T["id"]) => this.entityMap$.pipe(map(x => x[id]));
   selectByProp$ = (prop: Partial<T>) => this.entities$.pipe(where(prop));
 
-  sortByProperty$ = <M extends BaseModel>(
+  sortByProperty$ = <M>(
     key: keyof T,
     idFn: (item: M) => string
   ): SortFnAsync<M> => {

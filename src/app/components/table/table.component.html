@@ -2,7 +2,7 @@
   <ng-content select="[appTableButton]"></ng-content>
 </app-table-header>
 
-<table class="table" cdk-table [dataSource]="paginatedData$">
+<table class="table table-hover" cdk-table [dataSource]="paginatedData$">
   <ng-container cdkColumnDef="select">
     <th class="td-shrink" cdk-header-cell *cdkHeaderCellDef>
       <app-checkbox [(ngModel)]="allSelected"></app-checkbox>
@@ -17,7 +17,11 @@
 
   <ng-content></ng-content>
   <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
-  <tr cdk-row *cdkRowDef="let row; columns: displayedColumns"></tr>
+  <tr
+    cdk-row
+    *cdkRowDef="let row; columns: displayedColumns"
+    [ngClass]="{ 'table-active': selected[row.id] }"
+  ></tr>
 </table>
 
 <ngb-pagination

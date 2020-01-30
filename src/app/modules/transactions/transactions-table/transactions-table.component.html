@@ -34,60 +34,49 @@
       (ngModelChange)="update(transaction, { accountId: $event })"
     ></app-select-account>
   </app-table-cell>
-
-  <app-table-cell name="Payee" [sortBy]="sortByPayeeFn">
+  <app-table-cell name="payee" [sortBy]="sortByPayeeFn">
     <app-select-payee
       *appTableCellDef="let transaction"
       [(ngModel)]="transaction.payeeId"
       (ngModelChange)="update(transaction, { payeeId: $event })"
     ></app-select-payee>
   </app-table-cell>
-  <!--
-  <ng-container cdkColumnDef="categoryId">
-    <th cdk-header-cell *cdkHeaderCellDef>Category</th>
-    <td cdk-cell *cdkCellDef="let transaction">
-      <app-select-category
-        [(ngModel)]="transaction.categoryId"
-        (ngModelChange)="update(transaction, { categoryId: $event })"
-      ></app-select-category>
-    </td>
-  </ng-container>
-
-  <ng-container cdkColumnDef="description">
-    <th cdk-header-cell *cdkHeaderCellDef>Description</th>
-    <td cdk-cell *cdkCellDef="let transaction">
-      <input
-        type="text"
-        class="form-control-plaintext"
-        [(ngModel)]="transaction.description"
-        (ngModelChange)="update(transaction, { description: $event })"
-        [ngModelOptions]="{ updateOn: 'blur' }"
-        placeholder="Description..."
-      />
-    </td>
-  </ng-container>
-
-  <ng-container cdkColumnDef="amount">
-    <th cdk-header-cell *cdkHeaderCellDef>Amount</th>
-    <td cdk-cell *cdkCellDef="let transaction">
-      <app-input-currency
-        [(ngModel)]="transaction.amount"
-        (ngModelChange)="update(transaction, { amount: $event })"
-      ></app-input-currency>
-    </td>
-  </ng-container>
-
-  <ng-container cdkColumnDef="actions">
-    <th cdk-header-cell *cdkHeaderCellDef></th>
-    <td cdk-cell *cdkCellDef="let transaction">
-       <button
+  <app-table-cell name="category" [sortBy]="sortByCategoryFn">
+    <app-select-category
+      *appTableCellDef="let transaction"
+      [(ngModel)]="transaction.categoryId"
+      (ngModelChange)="update(transaction, { categoryId: $event })"
+    ></app-select-category>
+  </app-table-cell>
+  <app-table-cell name="description">
+    <input
+      *appTableCellDef="let transaction"
+      type="text"
+      class="form-control-plaintext"
+      [(ngModel)]="transaction.description"
+      (ngModelChange)="update(transaction, { description: $event })"
+      [ngModelOptions]="{ updateOn: 'blur' }"
+      placeholder="Description..."
+    />
+  </app-table-cell>
+  <app-table-cell name="amount">
+    <app-input-currency
+      *appTableCellDef="let transaction"
+      [(ngModel)]="transaction.amount"
+      (ngModelChange)="update(transaction, { amount: $event })"
+    ></app-input-currency>
+  </app-table-cell>
+  <app-table-cell name="actions" [sortBy]="null">
+    <ng-container *appTableHeaderCellDef></ng-container>
+    <ng-container *appTableCellDef="let transaction">
+      <!-- <button
         *ngIf="showSaveBtn"
         type="button"
         class="btn btn-primary"
         (click)="add(transaction)"
       >
         Add
-      </button>
+      </button> -->
 
       <button
         type="button"
@@ -96,14 +85,6 @@
       >
         Remove
       </button>
-    </td>
-  </ng-container> -->
-
-  <!-- <tr class="table-light" app-transactions-table-row [showSaveBtn]="true"></tr>
-  <tr
-    *tableRow="let transaction"
-    app-transactions-table-row
-    [transaction]="transaction"
-    (update)="update(transaction, $event)"
-  ></tr> -->
+    </ng-container>
+  </app-table-cell>
 </app-table>

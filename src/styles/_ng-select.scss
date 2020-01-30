@@ -3,6 +3,7 @@ ng-select {
     &:not(:hover):not(.ng-select-focused) {
       .ng-select-container {
         border-color: transparent;
+        background-color: transparent;
       }
       .ng-value-container {
         padding: 0;
