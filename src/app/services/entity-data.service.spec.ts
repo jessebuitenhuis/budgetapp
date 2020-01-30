@@ -10,10 +10,10 @@ describe("Service: EntityData", () => {
     });
   });
 
-  it("should ...", inject(
-    ["name", EntityDataService],
-    (service: EntityDataService<any>) => {
-      expect(service).toBeTruthy();
-    }
-  ));
+  // it("should ...", inject(
+  //   ["name", EntityDataService],
+  //   (service: EntityDataService<any>) => {
+  //     expect(service).toBeTruthy();
+  //   }
+  // ));
 });
