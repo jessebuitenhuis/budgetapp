@@ -1,19 +1,21 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { DebugElement } from "@angular/core";
 
-import { TransactionsTableComponent } from './transactions-table.component';
+import { TransactionsTableComponent } from "./transactions-table.component";
+import { ActivatedRoute } from "@angular/router";
+import { RouterTestingModule } from "@angular/router/testing";
 
-describe('TransactionsTableComponent', () => {
+describe("TransactionsTableComponent", () => {
   let component: TransactionsTableComponent;
   let fixture: ComponentFixture<TransactionsTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionsTableComponent ]
-    })
-    .compileComponents();
+      declarations: [TransactionsTableComponent],
+      imports: [RouterTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +24,7 @@ describe('TransactionsTableComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

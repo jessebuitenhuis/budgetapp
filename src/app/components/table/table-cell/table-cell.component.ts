@@ -5,7 +5,8 @@ import {
   ContentChild,
   AfterContentInit,
   ViewChild,
-  AfterViewInit
+  AfterViewInit,
+  Optional
 } from "@angular/core";
 import { TableComponent } from "../table.component";
 import { TableCellDefDirective } from "./table-cell-def.directive";
@@ -29,11 +30,13 @@ export class TableCellComponent<T> implements OnInit, AfterViewInit {
   @ContentChild(TableHeaderCellDefDirective)
   headerCellDef?: TableHeaderCellDefDirective;
 
-  constructor(private _table: TableComponent<any>) {}
+  constructor(@Optional() private _table?: TableComponent<any>) {}
 
   ngAfterViewInit(): void {
-    this._table.table.addColumnDef(this.columnDef);
-    this._table.displayedColumns.push(this.name);
+    if (this._table) {
+      this._table.table.addColumnDef(this.columnDef);
+      this._table.displayedColumns.push(this.name);
+    }
   }
 
   ngOnInit(): void {}

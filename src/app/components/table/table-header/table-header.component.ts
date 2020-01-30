@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input, Optional } from "@angular/core";
 import { TableComponent } from "../table.component";
 import { BehaviorSubject } from "rxjs";
 
@@ -10,17 +10,19 @@ import { BehaviorSubject } from "rxjs";
 export class TableHeaderComponent<T extends { id: string }>
   implements OnDestroy, OnInit {
   private _alive = true;
-  searchTerm$ = this.table.searchTerm$;
-  showSearch = this.table.showSearch;
+  searchTerm$ = this.table && this.table.searchTerm$;
+  showSearch = this.table && this.table.showSearch;
 
   @Input() title: string = "";
 
-  constructor(private table: TableComponent<T>) {}
+  constructor(@Optional() private table?: TableComponent<T>) {}
 
   ngOnInit(): void {}
 
   onSearchChange(term: string): void {
-    this.searchTerm$.next(term);
+    if (this.searchTerm$) {
+      this.searchTerm$.next(term);
+    }
   }
 
   ngOnDestroy(): void {

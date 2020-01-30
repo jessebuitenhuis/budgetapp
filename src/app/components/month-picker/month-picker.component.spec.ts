@@ -1,19 +1,20 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { DebugElement } from "@angular/core";
 
-import { MonthPickerComponent } from './month-picker.component';
+import { MonthPickerComponent } from "./month-picker.component";
+import { MomentModule } from "ngx-moment";
 
-describe('MonthPickerComponent', () => {
+describe("MonthPickerComponent", () => {
   let component: MonthPickerComponent;
   let fixture: ComponentFixture<MonthPickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MonthPickerComponent ]
-    })
-    .compileComponents();
+      imports: [MomentModule],
+      declarations: [MonthPickerComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +23,7 @@ describe('MonthPickerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
