@@ -11,40 +11,32 @@
   </label>
 </div> -->
 
-<app-table
-  [data]="transactions$ | async"
-  [sortFn]="sortFn"
-  [sortDesc]="true"
-  pageSize="25"
-  title="Transactions"
->
-  <app-table-cell></app-table-cell>
+<app-table [data]="transactions$ | async" pageSize="25" title="Transactions">
+  <app-table-cell name="date" [sortDefault]="true">
+    <ng-container *appTableHeaderCellDef>Header cell!</ng-container>
+    <app-input-date
+      *appTableCellDef="let transaction"
+      [ngModel]="transaction.date"
+      (ngModelChange)="update(transaction, { date: $event })"
+    ></app-input-date>
+  </app-table-cell>
 
-  <ng-container cdkColumnDef="date">
-    <th cdk-header-cell *cdkHeaderCellDef>Date</th>
-    <td cdk-cell *cdkCellDef="let transaction" class="text-nowrap"></td>
-  </ng-container>
+  <app-table-cell name="account" sortBy="accountId">
+    <app-select-account
+      *appTableCellDef="let transaction"
+      [(ngModel)]="transaction.accountId"
+      (ngModelChange)="update(transaction, { accountId: $event })"
+    ></app-select-account>
+  </app-table-cell>
 
-  <ng-container cdkColumnDef="accountId">
-    <th cdk-header-cell *cdkHeaderCellDef>Account</th>
-    <td cdk-cell *cdkCellDef="let transaction" class="py-0">
-      <app-select-account
-        [(ngModel)]="transaction.accountId"
-        (ngModelChange)="update(transaction, { accountId: $event })"
-      ></app-select-account>
-    </td>
-  </ng-container>
-
-  <ng-container cdkColumnDef="payeeId">
-    <th cdk-header-cell *cdkHeaderCellDef>Payee</th>
-    <td cdk-cell *cdkCellDef="let transaction">
-      <app-select-payee
-        [(ngModel)]="transaction.payeeId"
-        (ngModelChange)="update(transaction, { payeeId: $event })"
-      ></app-select-payee>
-    </td>
-  </ng-container>
-
+  <app-table-cell name="Payee" [sortBy]="sortByPayeeFn">
+    <app-select-payee
+      *appTableCellDef="let transaction"
+      [(ngModel)]="transaction.payeeId"
+      (ngModelChange)="update(transaction, { payeeId: $event })"
+    ></app-select-payee>
+  </app-table-cell>
+  <!--
   <ng-container cdkColumnDef="categoryId">
     <th cdk-header-cell *cdkHeaderCellDef>Category</th>
     <td cdk-cell *cdkCellDef="let transaction">
@@ -82,14 +74,14 @@
   <ng-container cdkColumnDef="actions">
     <th cdk-header-cell *cdkHeaderCellDef></th>
     <td cdk-cell *cdkCellDef="let transaction">
-      <!-- <button
+       <button
         *ngIf="showSaveBtn"
         type="button"
         class="btn btn-primary"
         (click)="add(transaction)"
       >
         Add
-      </button> -->
+      </button>
 
       <button
         type="button"
@@ -99,7 +91,7 @@
         Remove
       </button>
     </td>
-  </ng-container>
+  </ng-container> -->
 
   <!-- <tr class="table-light" app-transactions-table-row [showSaveBtn]="true"></tr>
   <tr

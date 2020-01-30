@@ -1,12 +1,17 @@
-import { pipe } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { pipe, of } from "rxjs";
+import { map, tap, switchMap } from "rxjs/operators";
 import {
   sum as sumFn,
   sumDictFn,
   SearchFn,
-  SortFn,
+  SortFnSync,
   sort,
-  paginate
+  paginate,
+  SortDirection,
+  SortFnAsync,
+  sortAsync,
+  SortFn,
+  isAsyncSortFn
 } from "./helpers";
 import {
   where as _where,
@@ -52,10 +57,22 @@ export const filterPipe = <T>(searchFn: SearchFn<T>) =>
     )
   );
 
-export const sortPipe = <T>(sortFn?: SortFn<T>) =>
+export const sortPipe = <T>() =>
   pipe(
-    map(([data, desc]: [T[], boolean]) =>
-      sortFn ? sort(data, sortFn, desc) : data
+    switchMap(
+      ([data, sortFn, direction]: [
+        T[],
+        SortFn<T> | null,
+        SortDirection | undefined
+      ]) => {
+        if (!sortFn) {
+          return of(data);
+        }
+        if (isAsyncSortFn(sortFn, data)) {
+          return sortAsync(data, sortFn, direction);
+        }
+        return of(sort(data, sortFn, direction));
+      }
     )
   );
 

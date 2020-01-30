@@ -13,3 +13,32 @@
 .td-shrink {
   width: 1%;
 }
+
+.th-sort {
+  color: $secondary;
+
+  &:hover,
+  &.th-sorted-asc,
+  &.th-sorted-desc {
+    color: $black;
+  }
+
+  &::after {
+    font-family: "Font Awesome 5 Free";
+    content: "";
+    display: inline-block;
+    margin-left: 5px;
+  }
+
+  &:hover::after {
+    content: "\f0dc";
+  }
+
+  &.th-sorted-asc::after {
+    content: "\f0dd";
+  }
+
+  &.th-sorted-desc::after {
+    content: "\f0de";
+  }
+}

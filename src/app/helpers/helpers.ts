@@ -1,4 +1,6 @@
 import { Dictionary, mapObject } from "underscore";
+import { Observable, forkJoin } from "rxjs";
+import { take, map } from "rxjs/operators";
 
 export function sum<T>(
   items: T[],
@@ -37,14 +39,26 @@ export function paginate<T>(
   return arr.slice(start, end);
 }
 
-export type SortFn<T> = (item: T) => any;
+export type SortFnSync<T> = (item: T) => any;
+export type SortFnAsync<T> = (item: T) => Observable<any>;
+export type SortFn<T> = SortFnSync<T> | SortFnAsync<T>;
+export enum SortDirection {
+  "ASCENDING",
+  "DESCENDING"
+}
+export function isAsyncSortFn<T>(
+  sortFn: SortFn<T>,
+  list: T[]
+): sortFn is SortFnAsync<T> {
+  return list.length > 0 && sortFn(list[0]) instanceof Observable;
+}
 
 export type SearchFn<T> = (item: T, searchTerm: string) => boolean;
 
 export function sort<T>(
   list: T[],
-  sortFn: SortFn<T>,
-  descending: boolean = false
+  sortFn: SortFnSync<T>,
+  descending: SortDirection = SortDirection.ASCENDING
 ): T[] {
   return list.sort((a: T, b: T) => {
     const aKey = sortFn(a);
@@ -58,6 +72,37 @@ export function sort<T>(
       return 0;
     }
   });
+}
+
+export function sortAsync<T>(
+  list: T[],
+  sortFn: SortFnAsync<T>,
+  descending: SortDirection = SortDirection.ASCENDING
+): Observable<T[]> {
+  const keys$ = forkJoin(
+    list.map(item => {
+      return sortFn(item).pipe(
+        take(1),
+        map(key => ({
+          item,
+          key
+        }))
+      );
+    })
+  );
+
+  return keys$.pipe(
+    map(keys =>
+      sort(
+        list,
+        item => {
+          const keyItem = keys.find(key => key.item === item);
+          return (keyItem && keyItem.key) || "";
+        },
+        descending
+      )
+    )
+  );
 }
 
 export function sortObject<T>(obj: Dictionary<T>): Dictionary<T> {

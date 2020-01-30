@@ -1,58 +1,51 @@
+import { CdkColumnDef, CdkTable } from "@angular/cdk/table";
 import {
+  AfterContentInit,
   Component,
   ContentChild,
+  ContentChildren,
   Input,
   OnDestroy,
-  ContentChildren,
   QueryList,
-  AfterContentInit,
   ViewChild
 } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { shareReplay, take, throttleTime, tap } from "rxjs/operators";
 import {
-  map,
-  debounceTime,
-  throttleTime,
-  startWith,
-  shareReplay,
-  take
-} from "rxjs/operators";
-import { paginate, SortFn, sort, SearchFn } from "src/app/helpers/helpers";
-import { TableRowDirective } from "./table-row.directive";
-import { filterPipe, sortPipe, paginatePipe } from "src/app/helpers/pipes";
+  SearchFn,
+  SortFnSync,
+  SortDirection,
+  SortFn
+} from "src/app/helpers/helpers";
+import { filterPipe, paginatePipe, sortPipe } from "src/app/helpers/pipes";
 import { ObservableInput } from "src/app/_decorators/ObservableInput";
-import {
-  CdkColumnDef,
-  CdkCellDef,
-  CdkCell,
-  CdkTable
-} from "@angular/cdk/table";
-import { mapObject, Dictionary } from "underscore";
-import { TableCellDirective } from "./table-cell/table-cell.component";
+import { Dictionary } from "underscore";
+import { TableRowDirective } from "./table-row.directive";
 
 @Component({
   selector: "app-table",
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.css"]
 })
-export class TableComponent<T extends { id: string }>
-  implements AfterContentInit {
+export class TableComponent<T extends { id: string }> {
   displayedColumns: string[] = [];
   @ViewChild(CdkTable, { static: true }) table!: CdkTable<T>;
+  @ContentChildren(CdkColumnDef) columnDefs!: QueryList<CdkColumnDef>;
 
   // above cdk
 
   @ObservableInput() @Input("data") data$!: Observable<T[]>;
   @ObservableInput(10) @Input("pageSize") pageSize$!: Observable<number>;
-  @ObservableInput(false) @Input("sortDesc") sortDesc$!: Observable<boolean>;
 
   @Input() searchFn: SearchFn<T> = this._getDefaultSearchFn();
-  @Input() sortFn?: SortFn<T>;
+  sortFn$ = new BehaviorSubject<SortFn<T> | null>(null);
+  sortDirection$ = new BehaviorSubject<SortDirection>(SortDirection.DESCENDING);
 
-  // TODO: make options input?
   @Input() set showSelect(val: boolean) {
     if (val) {
-      this.displayedColumns.push("select");
+      this.displayedColumns = ["select", ...this.displayedColumns];
+    } else {
+      this.displayedColumns = this.displayedColumns.filter(x => x !== "select");
     }
   }
   @Input() showSearch = true;
@@ -68,12 +61,14 @@ export class TableComponent<T extends { id: string }>
     this.searchTerm$.pipe(throttleTime(200))
   ]).pipe(filterPipe(this.searchFn), shareReplay(1));
 
-  sortedData$ = combineLatest([this.filteredData$, this.sortDesc$]).pipe(
-    sortPipe(this.sortFn)
-  );
+  sortedData$ = combineLatest([
+    this.filteredData$,
+    this.sortFn$,
+    this.sortDirection$
+  ]).pipe(sortPipe());
 
   paginatedData$ = combineLatest([
-    this.filteredData$,
+    this.sortedData$,
     this.page$,
     this.pageSize$
   ]).pipe(paginatePipe(), shareReplay(1));

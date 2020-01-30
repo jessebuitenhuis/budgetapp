@@ -5,6 +5,8 @@ import { EntityDataService } from "./entity-data.service";
 import { where } from "../helpers/pipes";
 import * as uuid from "uuid/v1";
 import { Viewmodel } from "../models/types";
+import { SortFnAsync } from "../helpers/helpers";
+import { Transaction } from "../models/Transaction";
 
 export interface EntityMap<T> {
   [key: string]: T;
@@ -36,6 +38,14 @@ export abstract class EntityService<T extends BaseModel> {
 
   selectById$ = (id: T["id"]) => this.entityMap$.pipe(map(x => x[id]));
   selectByProp$ = (prop: Partial<T>) => this.entities$.pipe(where(prop));
+
+  sortByProperty$ = <M extends BaseModel>(
+    key: keyof T,
+    idFn: (item: M) => string
+  ): SortFnAsync<M> => {
+    return (item: M) =>
+      this.selectById$(idFn(item)).pipe(map(x => x && x[key]));
+  };
 
   constructor(private _name: string) {
     this.getAll();

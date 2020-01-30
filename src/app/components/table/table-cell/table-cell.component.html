@@ -1,5 +1,29 @@
-<ng-container cdkColumnDef="test">
-  <th cdk-header-cell *cdkHeaderCellDef>Headername</th>
-  <!-- todo load table template -->
-  <td cdk-cell *cdkCellDef="let item">test</td>
+<!-- <ng-container cdkColumnDef="name">
+  <th cdk-header-cell *cdkHeaderCellDef>{{ name }}</th>
+  <td cdk-cell *cdkCellDef="let transaction" class="text-nowrap">
+    <ng-container [ngTemplateOutlet]="cellDef?.templateRef"></ng-container>
+  </td>
+</ng-container> -->
+<ng-container [cdkColumnDef]="name">
+  <th
+    cdk-header-cell
+    *cdkHeaderCellDef
+    [appTableSort]="sortBy"
+    [appTableSortDefault]="sortDefault"
+    [appTableSortDirection]="sortDirection"
+  >
+    <ng-container
+      *ngIf="headerCellDef?.templateRef as tpl; else nameTpl"
+      [ngTemplateOutlet]="tpl"
+    ></ng-container>
+  </th>
+  <td cdk-cell *cdkCellDef="let item" class="text-nowrap">
+    <ng-container
+      *ngTemplateOutlet="cellDef?.templateRef; context: { $implicit: item }"
+    ></ng-container>
+  </td>
 </ng-container>
+
+<ng-template #nameTpl>
+  {{ name | titlecase }}
+</ng-template>

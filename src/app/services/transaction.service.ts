@@ -21,7 +21,7 @@ import {
 import { PayeeService } from "./payee.service";
 import { AccountService } from "./account.service";
 import { Category } from "../models/Category";
-import { sort } from "../helpers/helpers";
+import { sort, SortDirection } from "../helpers/helpers";
 import {
   Transaction,
   incomeFilter,
@@ -330,7 +330,7 @@ export class TransactionService extends EntityService<Transaction> {
     }
 
     // TODO add more fuzzy searches
-    const sorted = sort(matches, x => x.date, true);
+    const sorted = sort(matches, x => x.date, SortDirection.DESCENDING);
     const categoryId = (sorted[0] && sorted[0].categoryId) || undefined;
     return categoryId;
   }

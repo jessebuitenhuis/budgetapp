@@ -1,23 +1,28 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule as NgFormsModule } from "@angular/forms";
-import { TableComponent } from "./table.component";
-import { TableRowDirective } from "./table-row.directive";
-import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
-import { TableHeaderComponent } from "./table-header/table-header.component";
-import { FormsModule } from "../forms/forms.module";
-import { TableButtonDirective } from "./table-button.directive";
 import { CdkTableModule } from "@angular/cdk/table";
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { FormsModule as NgFormsModule } from "@angular/forms";
+import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormsModule } from "../forms/forms.module";
 import { InputsModule } from "../inputs/inputs.module";
+import { TableButtonDirective } from "./table-button.directive";
+import { TableCellDefDirective } from "./table-cell/table-cell-def.directive";
+import { TableCellComponent } from "./table-cell/table-cell.component";
+import { TableHeaderCellDefDirective } from "./table-cell/table-header-cell-def.directive";
+import { TableHeaderComponent } from "./table-header/table-header.component";
+import { TableRowDirective } from "./table-row.directive";
 import { TableSortDirective } from "./table-sort.directive";
-import { TableCellDirective } from "./table-cell/table-cell.component";
+import { TableComponent } from "./table.component";
 
 const components = [
   TableComponent,
+  TableButtonDirective,
   TableRowDirective,
   TableHeaderComponent,
   TableSortDirective,
-  TableCellDirective
+  TableCellComponent,
+  TableCellDefDirective,
+  TableHeaderCellDefDirective
 ];
 
 @NgModule({
@@ -29,7 +34,7 @@ const components = [
     FormsModule,
     InputsModule
   ],
-  declarations: [...components, TableButtonDirective, TableSortDirective],
+  declarations: [...components, TableSortDirective],
   exports: [...components, CdkTableModule]
 })
 export class TableModule {}

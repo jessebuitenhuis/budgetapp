@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Transaction } from "src/app/models/Transaction";
 import { TransactionService } from "src/app/services/transaction.service";
-import { SortFn } from "src/app/helpers/helpers";
+import { SortFnSync, SortFnAsync } from "src/app/helpers/helpers";
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MatchTransactionsComponent } from "../match-transactions/match-transactions.component";
 import { ActivatedRoute } from "@angular/router";
+import { PayeeService } from "src/app/services/payee.service";
 
 @Component({
   selector: "app-transactions-table",
@@ -27,11 +28,15 @@ export class TransactionsTableComponent {
     })
   );
 
+  sortByPayeeFn: SortFnAsync<Transaction> = item =>
+    this._payeeService.selectById$(item.payeeId).pipe(map(x => x && x.name));
+
   newTransaction: Transaction = this._transactionService.createEntity();
-  sortFn: SortFn<Transaction> = item => item.date;
+  sortFn: SortFnSync<Transaction> = item => item.date;
 
   constructor(
     private _transactionService: TransactionService,
+    private _payeeService: PayeeService,
     private _activatedRoute: ActivatedRoute,
     private ngbModal: NgbModal
   ) {}
