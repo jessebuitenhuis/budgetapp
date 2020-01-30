@@ -24,6 +24,7 @@
       *appTableCellDef="let transaction"
       [ngModel]="transaction.date"
       (ngModelChange)="update(transaction, { date: $event })"
+      [ngModelOptions]="{ updateOn: 'blur' }"
     ></app-input-date>
   </app-table-cell>
 
