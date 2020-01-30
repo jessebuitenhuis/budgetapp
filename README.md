@@ -1,5 +1,5 @@
 # Budget
-![CI](https://github.com/jessebuitenhuis/budgetapp/workflows/CI/badge.svg)
+![CI](https://github.com/jessebuitenhuis/budgetapp/workflows/CI/badge.svg?branch=master)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.1.
 
