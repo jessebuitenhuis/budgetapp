@@ -3,7 +3,9 @@ name: On Push
 on:
   push:
     branches:
-      - !master
+      - "*"
+      - "*/*"
+      - "!master"
 
 jobs:
   build:
