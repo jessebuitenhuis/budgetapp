@@ -1,25 +1,18 @@
 import { Injectable } from "@angular/core";
+import {
+  EntityCollectionServiceBase,
+  EntityCollectionServiceElementsFactory
+} from "@ngrx/data";
 import { Account, assetsFilter, liabilitiesFilter } from "../models/Account";
-import { EntityService } from "./entity.service";
-import { TransactionService } from "./transaction.service";
-import { map } from "rxjs/operators";
-import { sum, where } from "../helpers/pipes";
 
 @Injectable({
   providedIn: "root"
 })
-export class AccountService extends EntityService<Account> {
-  constructor() {
-    super("account");
+export class AccountService extends EntityCollectionServiceBase<Account> {
+  constructor(factory: EntityCollectionServiceElementsFactory) {
+    super("Account", factory);
   }
 
-  assetAccounts$ =
-    this.entities$.pipe(
-      assetsFilter
-    );
-
-  liabilityAccounts$ =
-    this.entities$.pipe(
-      liabilitiesFilter
-    );
+  assetAccounts$ = this.entities$.pipe(assetsFilter);
+  liabilityAccounts$ = this.entities$.pipe(liabilitiesFilter);
 }

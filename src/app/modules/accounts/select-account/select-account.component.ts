@@ -20,8 +20,9 @@ export class SelectAccountComponent extends AbstractValueAccessor<string> {
     super(control);
   }
 
-  addTagFn = (name: string): Account => {
+  addTagFn = (name: string): Observable<Account> => {
     return this._accountService.add({
+      id: "test",
       name
     });
   };

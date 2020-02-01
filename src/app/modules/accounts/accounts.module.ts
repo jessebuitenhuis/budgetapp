@@ -9,7 +9,12 @@ import { AccountsTableRowComponent } from "./accounts-table/accounts-table-row/a
 import { ComponentsModule } from "../../components/components.module";
 import { AccountSummaryComponent } from "./account-summary/account-summary.component";
 import { RouterModule } from "@angular/router";
-import { SelectAccountsComponent } from './select-accounts/select-accounts.component';
+import { SelectAccountsComponent } from "./select-accounts/select-accounts.component";
+import { StoreModule } from "@ngrx/store";
+import {
+  accountsReducer,
+  accountsReducerFeatureKey
+} from "./store/account.reducers";
 
 const components = [
   SelectAccountComponent,
@@ -23,7 +28,8 @@ const components = [
     NgSelectModule,
     FormsModule,
     ComponentsModule,
-    RouterModule
+    RouterModule,
+    StoreModule.forFeature(accountsReducerFeatureKey, accountsReducer)
   ],
   declarations: [
     AccountsComponent,

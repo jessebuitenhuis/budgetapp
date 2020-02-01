@@ -247,12 +247,14 @@ export class TransactionService extends EntityService<Transaction> {
   }
 
   mapCsvItem(item: Transaction): Transaction {
-    const account =
-      item.accountId &&
-      this._accountService.findOrCreate(x => x.id === item.accountId, {
-        id: item.accountId,
-        name: item.accountId
-      });
+    // const account =
+    //   item.accountId &&
+    //   this._accountService.entities$.pipe(x => x.id === item.accountId, {
+    //     id: item.accountId,
+    //     name: item.accountId
+    //   });
+
+    const account = { id: "1" };
 
     const payee =
       item.payeeName &&
