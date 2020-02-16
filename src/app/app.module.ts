@@ -18,11 +18,13 @@ import { NetWorthModule } from "./modules/net-worth/net-worth.module";
 import { SpendingReportModule } from "./modules/spending-report/spending-report.module";
 import { AccountsModule } from "./modules/accounts/accounts.module";
 import { StoreModule } from "@ngrx/store";
-import { reducers, metaReducers } from "./store/reducers";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { environment } from "../environments/environment";
 import { EffectsModule } from "@ngrx/effects";
-import { AppEffects } from "./store/effects/app.effects";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AccountEffects } from "./modules/accounts/_store/accounts.effects";
+import { FireModule } from "./fire/fire.module";
 
 registerLocaleData(localeNl, "nl");
 
@@ -42,15 +44,20 @@ registerLocaleData(localeNl, "nl");
     NetWorthModule,
     SpendingReportModule,
     AccountsModule,
-    StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
+    StoreModule.forRoot(
+      {},
+      {
+        runtimeChecks: {
+          strictStateImmutability: true,
+          strictActionImmutability: true
+        }
       }
-    }),
+    ),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([AppEffects])
+    EffectsModule.forRoot([AccountEffects]),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    FireModule
   ],
   providers: [],
   bootstrap: [AppComponent],
