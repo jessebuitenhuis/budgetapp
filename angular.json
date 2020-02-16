@@ -141,5 +141,8 @@
       }
     }
   },
-  "defaultProject": "Budget"
+  "defaultProject": "Budget",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
