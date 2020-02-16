@@ -11,21 +11,13 @@ export interface Account extends BaseModel {
   type?: AccountType;
 }
 
-export const assetsFilter = pipe(
-  map((accounts: Account[]) =>
-    accounts.filter(x => x.type === undefined || x.type === "asset")
-  )
-);
+export const assetsFilter = (accounts: Account[]) =>
+  accounts.filter(x => x.type === undefined || x.type === "asset");
 
-export const liabilitiesFilter = pipe(
-  map((accounts: Account[]) => accounts.filter(x => x.type === "liability"))
-);
+export const liabilitiesFilter = (accounts: Account[]) =>
+  accounts.filter(x => x.type === "liability");
 
-export const accountsFilter = (accountIds: string[]) =>
-  pipe(
-    map((accounts: Account[]) =>
-      accountIds.length === 0
-        ? accounts
-        : accounts.filter(x => accountIds.includes(x.id))
-    )
-  );
+export const accountsFilter = (accountIds: string[]) => (accounts: Account[]) =>
+  accountIds.length === 0
+    ? accounts
+    : accounts.filter(x => accountIds.includes(x.id));

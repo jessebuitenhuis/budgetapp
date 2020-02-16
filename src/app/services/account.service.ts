@@ -1,26 +1,14 @@
 import { Injectable } from "@angular/core";
+import { FireService } from "../fire/fire.service";
 import { Account, assetsFilter, liabilitiesFilter } from "../models/Account";
-import { EntityService } from "./entity.service";
-import { TransactionService } from "./transaction.service";
-import { map } from "rxjs/operators";
-import { sum, where } from "../helpers/pipes";
-import { FireEffects } from "../fire/fire.service";
+import { createSelector } from "@ngrx/store";
 
 @Injectable({
   providedIn: "root"
 })
-export class AccountService extends FireEffects<Account> {
-  constructor() {
-    super("account");
-  }
+export class AccountService extends FireService<Account> {
+  name = "account";
 
-  // assetAccounts$ =
-  //   this.entities$.pipe(
-  //     assetsFilter
-  //   );
-
-  // liabilityAccounts$ =
-  //   this.entities$.pipe(
-  //     liabilitiesFilter
-  //   );
+  selectAssetAccounts = createSelector(this.entities$, assetsFilter);
+  selectLiabilityAccount$ = createSelector(this.entities$, liabilitiesFilter);
 }

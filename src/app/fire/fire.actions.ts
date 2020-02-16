@@ -6,6 +6,10 @@ import { BaseModel } from "../models/BaseModel";
 
 export interface FirePayload {
   entityName: string;
+}
+
+export interface FirePayloadWithData {
+  entityName: string;
   data: BaseModel[];
 }
 
@@ -34,5 +38,5 @@ export function ofFireOp<T extends FireAction>(
 export const fireGetAll = createAction("[Fire] Get All", props<FirePayload>());
 export const fireGetAllSuccess = createAction(
   "[Fire] Get All Success",
-  props<FirePayload>()
+  props<FirePayloadWithData>()
 );

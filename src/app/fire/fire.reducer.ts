@@ -2,11 +2,11 @@ import { BaseModel } from "../models/BaseModel";
 import { createReducer, on, Action, ActionReducer } from "@ngrx/store";
 import { fireGetAllSuccess } from "./fire.actions";
 
-export interface State {
+export interface FireState {
   [name: string]: BaseModel[];
 }
 
-const initialState: State = {};
+const initialState: FireState = {};
 
 const fireReducer = createReducer(
   initialState,
@@ -16,6 +16,16 @@ const fireReducer = createReducer(
   }))
 );
 
-export function reducer(state: State | undefined, action: Action): State {
+export function reducer(
+  state: FireState | undefined,
+  action: Action
+): FireState {
   return fireReducer(state, action);
 }
+
+export const selectFirestore = (state: { fireStore: FireState }) =>
+  state.fireStore;
+
+export const selectEntitiesFactory = <T extends BaseModel>(
+  entityName: string
+) => (state: FireState) => state[entityName] as T[];
